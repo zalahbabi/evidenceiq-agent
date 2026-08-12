@@ -1,0 +1,27 @@
+# EvidenceIQ dependencies
+# Install:  pip install -r requirements.txt
+
+# --- Data + database ---
+pandas>=2.2
+openpyxl>=3.1          # pandas needs this to read .xlsx files
+duckdb>=1.0            # analytics database, read-only at query time
+
+# --- Charts ---
+matplotlib>=3.8
+
+# --- Notebooks ---
+jupyter>=1.0
+
+# --- App ---
+streamlit>=1.35
+
+# --- LLM ---
+# Pin this once the team picks a provider.
+# anthropic>=0.34
+# openai>=1.40
+
+# --- Eval ---
+pyyaml>=6.0            # benchmark.yaml
+
+# --- Dev ---
+pytest>=8.0
