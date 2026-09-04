@@ -1,0 +1,290 @@
+# EvidenceIQ evaluation benchmark
+#
+# Target: 30 questions. These are the first 15.
+# Split so far: 5 easy · 5 medium · 2 hard · 3 trick
+#
+# CONVENTIONS
+#   - "revenue" always means KPI 1: SUM(revenue) WHERE NOT is_cancellation.
+#     Any answer quoting revenue must say that cancellations are excluded.
+#   - Product questions additionally apply KPI 8: is_product AND NOT is_outlier,
+#     grouped by stock_code with mode(description) for the name.
+#   - Month comparisons must respect dim_month.is_complete_month and state the
+#     trading-day count.
+#
+# PROCESS
+#   1. gt_sql was run against data/processed/evidenceiq.duckdb
+#   2. gt_value / gt_answer copied from that result
+#   3. reviewed_by MUST be filled by a second person re-running gt_sql
+#      -> nothing counts until reviewed_by is set
+#
+# difficulty: easy | medium | hard | trick
+#   trick = the data cannot support the question; the agent must refuse
+#           (insufficient_data = true) rather than estimate.
+
+questions:
+
+  # ------------------------------------------------------------------ easy
+  - id: q01
+    question: "What was our total revenue in 2011?"
+    difficulty: easy
+    answerable: true
+    gt_value: 9809614.01
+    gt_answer: "GBP 9,809,614.01 (cancellations excluded)"
+    gt_sql: |
+      SELECT ROUND(SUM(revenue), 2) AS revenue
+      FROM sales
+      WHERE NOT is_cancellation AND year(invoice_date) = 2011;
+    expected_tool: run_sql
+    expected_chart: none
+    kpi: revenue
+    notes: "Answer must state that cancellations are excluded."
+    reviewed_by: null
+
+  - id: q02
+    question: "How many orders did we take in 2011?"
+    difficulty: easy
+    answerable: true
+    gt_value: 20362
+    gt_answer: "20,362 completed orders"
+    gt_sql: |
+      SELECT COUNT(DISTINCT invoice_no) AS orders
+      FROM sales
+      WHERE NOT is_cancellation AND year(invoice_date) = 2011;
+    expected_tool: run_sql
+    expected_chart: none
+    kpi: orders
+    reviewed_by: null
+
+  - id: q03
+    question: "How many units did we sell in 2011?"
+    difficulty: easy
+    answerable: true
+    gt_value: 5283923
+    gt_answer: "5,283,923 units"
+    gt_sql: |
+      SELECT SUM(quantity) AS units
+      FROM sales
+      WHERE NOT is_cancellation AND quantity > 0 AND year(invoice_date) = 2011;
+    expected_tool: run_sql
+    expected_chart: none
+    kpi: units_sold
+    notes: "quantity > 0 excludes the damage/write-off rows (see KPI 2 fix)."
+    reviewed_by: null
+
+  - id: q04
+    question: "How many customers bought from us in 2011?"
+    difficulty: easy
+    answerable: true
+    gt_value: 4220
+    gt_answer: "4,220 identified customers"
+    gt_sql: |
+      SELECT COUNT(DISTINCT customer_id) AS customers
+      FROM sales
+      WHERE NOT is_cancellation AND customer_id IS NOT NULL
+        AND year(invoice_date) = 2011;
+    expected_tool: run_sql
+    expected_chart: none
+    kpi: active_customers
+    notes: "Should mention that 22.8% of rows have no customer ID, so this
+            counts identified customers only."
+    reviewed_by: null
+
+  - id: q05
+    question: "What was our average order value in 2011?"
+    difficulty: easy
+    answerable: true
+    gt_value: 481.76
+    gt_answer: "GBP 481.76"
+    gt_sql: |
+      SELECT ROUND(SUM(revenue) / COUNT(DISTINCT invoice_no), 2) AS aov
+      FROM sales
+      WHERE NOT is_cancellation AND year(invoice_date) = 2011;
+    expected_tool: run_sql
+    expected_chart: none
+    kpi: average_order_value
+    reviewed_by: null
+
+  # ---------------------------------------------------------------- medium
+  - id: q06
+    question: "Which country outside the UK generated the most revenue in 2011?"
+    difficulty: medium
+    answerable: true
+    gt_value: 276661.86
+    gt_answer: "Netherlands, GBP 276,661.86 (EIRE second at 273,107.26)"
+    gt_sql: |
+      SELECT country, ROUND(SUM(revenue), 2) AS revenue
+      FROM sales
+      WHERE NOT is_cancellation AND year(invoice_date) = 2011
+        AND country <> 'United Kingdom'
+      GROUP BY country ORDER BY revenue DESC LIMIT 1;
+    expected_tool: run_sql
+    expected_chart: bar
+    kpi: revenue_by_country
+    notes: "Netherlands and EIRE are within 1.3% of each other - a good test of
+            whether the agent reports a close call honestly."
+    reviewed_by: null
+
+  - id: q07
+    question: "Which five products generated the most revenue in 2011?"
+    difficulty: medium
+    answerable: true
+    gt_value: 146461.78
+    gt_answer: "1 REGENCY CAKESTAND 3 TIER 146,461.78 · 2 PARTY BUNTING 98,237.49
+                · 3 WHITE HANGING HEART T-LIGHT HOLDER 94,027.39
+                · 4 JUMBO BAG RED RETROSPOT 90,140.66 · 5 RABBIT NIGHT LIGHT 66,870.03"
+    gt_sql: |
+      SELECT stock_code, mode(description) AS description,
+             ROUND(SUM(revenue), 2) AS revenue
+      FROM sales
+      WHERE NOT is_cancellation AND is_product AND NOT is_outlier
+        AND year(invoice_date) = 2011
+      GROUP BY stock_code ORDER BY revenue DESC LIMIT 5;
+    expected_tool: run_sql
+    expected_chart: bar
+    kpi: revenue_by_product
+    notes: "Without is_product the answer is wrong (Manual/DOTCOM POSTAGE appear).
+            Without NOT is_outlier, PAPER CRAFT LITTLE BIRDIE wrongly tops the list."
+    reviewed_by: null
+
+  - id: q08
+    question: "What share of our 2011 revenue came from the UK?"
+    difficulty: medium
+    answerable: true
+    gt_value: 84.05
+    gt_answer: "84.05%"
+    gt_sql: |
+      SELECT ROUND(100.0 * SUM(CASE WHEN country = 'United Kingdom'
+                                    THEN revenue ELSE 0 END) / SUM(revenue), 2) AS uk_pct
+      FROM sales
+      WHERE NOT is_cancellation AND year(invoice_date) = 2011;
+    expected_tool: run_sql
+    expected_chart: pie
+    kpi: revenue_by_country
+    reviewed_by: null
+
+  - id: q09
+    question: "Which month had the highest revenue across the whole dataset?"
+    difficulty: medium
+    answerable: true
+    gt_value: 1456145.80
+    gt_answer: "November 2011, GBP 1,456,145.80 over 26 trading days"
+    gt_sql: |
+      SELECT invoice_month, ROUND(net_revenue, 2) AS revenue, trading_days
+      FROM dim_month
+      WHERE is_complete_month
+      ORDER BY net_revenue DESC LIMIT 1;
+    expected_tool: run_sql
+    expected_chart: line
+    kpi: revenue
+    notes: "Must filter is_complete_month. December 2011 has only 8 trading days
+            and is not a valid candidate."
+    reviewed_by: null
+
+  - id: q10
+    question: "What was our cancellation rate in 2011?"
+    difficulty: medium
+    answerable: true
+    gt_value: 17.24
+    gt_answer: "17.24% - cancellation invoices as a share of completed orders"
+    gt_sql: |
+      SELECT ROUND(100.0 *
+        (SELECT COUNT(DISTINCT invoice_no) FROM sales
+          WHERE is_cancellation AND year(invoice_date) = 2011)
+      / (SELECT COUNT(DISTINCT invoice_no) FROM sales
+          WHERE NOT is_cancellation AND year(invoice_date) = 2011), 2) AS pct;
+    expected_tool: run_sql
+    expected_chart: none
+    kpi: cancellation_rate
+    notes: "A cancellation is its own invoice and cannot be linked to the order it
+            cancelled, so this is cancellations vs orders in the same period, NOT
+            the share of orders later cancelled. The answer must say so."
+    reviewed_by: null
+
+  # ------------------------------------------------------------------ hard
+  - id: q11
+    question: "Did November 2011 beat October 2011 on revenue, and by how much?"
+    difficulty: hard
+    answerable: true
+    gt_value: 36.17
+    gt_answer: "Yes - GBP 1,456,145.80 vs 1,069,368.23, up 36.17%.
+                Both months had 26 trading days, so the comparison is like-for-like."
+    gt_sql: |
+      SELECT ROUND(100.0 * (
+          MAX(CASE WHEN invoice_month = '2011-11' THEN net_revenue END)
+        - MAX(CASE WHEN invoice_month = '2011-10' THEN net_revenue END))
+        / MAX(CASE WHEN invoice_month = '2011-10' THEN net_revenue END), 2) AS pct_change
+      FROM dim_month;
+    expected_tool: run_python
+    expected_chart: line
+    kpi: revenue
+    notes: "Tests the recompute check: the percentage must re-derive from the two
+            monthly totals."
+    reviewed_by: null
+
+  - id: q12
+    question: "Revenue dropped sharply from March to April 2011. How big was the
+               drop, and does it look different per trading day?"
+    difficulty: hard
+    answerable: true
+    gt_value: -7.18
+    gt_answer: "Total revenue fell 27.81% (682,013.98 to 492,367.84), but March had
+                27 trading days and April 21. Per trading day the fall is 7.18%
+                (25,259.78 to 23,446.09)."
+    gt_sql: |
+      SELECT ROUND(100.0 * (a.net_revenue - m.net_revenue) / m.net_revenue, 2) AS total_pct,
+             ROUND(100.0 * ((a.net_revenue / a.trading_days) - (m.net_revenue / m.trading_days))
+                   / (m.net_revenue / m.trading_days), 2) AS per_day_pct
+      FROM dim_month m, dim_month a
+      WHERE m.invoice_month = '2011-03' AND a.invoice_month = '2011-04';
+    expected_tool: run_python
+    expected_chart: bar
+    kpi: revenue
+    notes: "The hardest question in the set. A naive agent reports -27.81% and stops.
+            A good answer normalises by trading days AND avoids causal language."
+    reviewed_by: null
+
+  # ----------------------------------------------------------------- trick
+  # The data cannot support these. Correct behaviour is insufficient_data = true
+  # with an explanation. Producing a number counts as a hallucination.
+  - id: q13
+    question: "What was our profit margin in 2011?"
+    difficulty: trick
+    answerable: false
+    gt_value: null
+    gt_answer: "Refuse. The dataset has selling price only - no cost of goods, so
+                profit and margin cannot be calculated."
+    gt_sql: null
+    expected_tool: none
+    expected_chart: none
+    reviewed_by: null
+
+  - id: q14
+    question: "How did December 2011 compare with November 2011?"
+    difficulty: trick
+    answerable: false
+    gt_value: null
+    gt_answer: "Refuse the direct comparison. December 2011 has only 8 trading days
+                (data stops 9 Dec) versus 26 in November, so it is not a complete
+                month. The agent may report the raw figures (432,719.06 vs
+                1,456,145.80) but must flag the comparison as invalid."
+    gt_sql: |
+      SELECT invoice_month, ROUND(net_revenue, 2) AS revenue,
+             trading_days, is_complete_month
+      FROM dim_month WHERE invoice_month IN ('2011-11', '2011-12');
+    expected_tool: run_sql
+    expected_chart: none
+    notes: "Partial-refusal test: the data exists but the comparison does not hold.
+            This is the most realistic failure mode in the whole benchmark."
+    reviewed_by: null
+
+  - id: q15
+    question: "What will our revenue be next quarter?"
+    difficulty: trick
+    answerable: false
+    gt_value: null
+    gt_answer: "Refuse. Two years of one retailer's transactions is not a basis for
+                forecasting, and EvidenceIQ does not forecast."
+    gt_sql: null
+    expected_tool: none
+    expected_chart: none
+    reviewed_by: null
