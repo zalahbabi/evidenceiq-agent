@@ -16,6 +16,7 @@ Takes about a minute. Most of that is reading the Excel file.
 """
 
 import os
+import tempfile
 
 import duckdb
 import pandas as pd
@@ -117,75 +118,78 @@ def check(df):
 def build_tables(df):
     """One main table plus three summary tables."""
     os.makedirs(os.path.dirname(DB), exist_ok=True)
-    if os.path.exists(DB):
-        os.remove(DB)                      # always rebuild from scratch
+    # Build beside the destination, then replace it only after validation.
+    # A failed rebuild must leave the team's existing database intact.
+    with tempfile.TemporaryDirectory(prefix=".evidenceiq-build-", dir=os.path.dirname(DB)) as folder:
+        pending = os.path.join(folder, "evidenceiq.duckdb")
+        with duckdb.connect(pending) as con:
+            con.execute("CREATE TABLE sales AS SELECT * FROM df")
 
-    con = duckdb.connect(DB)
-    con.execute("CREATE TABLE sales AS SELECT * FROM df")
+            # dim_month carries the December warning, so the AI does not have to
+            # remember it. trading_days lets us compare months fairly.
+            #
+            # net_revenue EXCLUDES cancellations, to match KPI 1 in
+            # docs/kpi_definitions.md. It used to be a plain SUM(revenue), which
+            # quietly disagreed with the KPI doc: the agent would query
+            # "WHERE NOT is_cancellation" and get a different number to our own
+            # ground truth. gross_revenue keeps the with-cancellations figure so
+            # nothing is lost.
+            con.execute("""
+                CREATE TABLE dim_month AS
+                SELECT
+                    invoice_month,
+                    COUNT(DISTINCT invoice_date) AS trading_days,
+                    MAX(invoice_date)            AS last_day,
+                    SUM(revenue) FILTER (WHERE NOT is_cancellation) AS net_revenue,
+                    SUM(revenue)                 AS gross_revenue,
+                    invoice_month <> (SELECT MAX(invoice_month) FROM sales)
+                                                 AS is_complete_month
+                FROM sales
+                GROUP BY invoice_month
+                ORDER BY invoice_month
+            """)
 
-    # dim_month carries the December warning, so the AI does not have to
-    # remember it. trading_days lets us compare months fairly.
-    #
-    # net_revenue EXCLUDES cancellations, to match KPI 1 in
-    # docs/kpi_definitions.md. It used to be a plain SUM(revenue), which
-    # quietly disagreed with the KPI doc: the agent would query
-    # "WHERE NOT is_cancellation" and get a different number to our own
-    # ground truth. gross_revenue keeps the with-cancellations figure so
-    # nothing is lost.
-    con.execute("""
-        CREATE TABLE dim_month AS
-        SELECT
-            invoice_month,
-            COUNT(DISTINCT invoice_date) AS trading_days,
-            MAX(invoice_date)            AS last_day,
-            SUM(revenue) FILTER (WHERE NOT is_cancellation) AS net_revenue,
-            SUM(revenue)                 AS gross_revenue,
-            invoice_month <> (SELECT MAX(invoice_month) FROM sales)
-                                         AS is_complete_month
-        FROM sales
-        GROUP BY invoice_month
-        ORDER BY invoice_month
-    """)
+            # mode(description) because the same stock_code appears with several
+            # different descriptions in the raw data.
+            con.execute("""
+                CREATE TABLE dim_product AS
+                SELECT
+                    stock_code,
+                    mode(description)                          AS description,
+                    SUM(quantity) FILTER (WHERE quantity > 0)  AS units_sold,
+                    SUM(revenue)  FILTER (WHERE quantity > 0)  AS gross_revenue
+                FROM sales
+                GROUP BY stock_code
+            """)
 
-    # mode(description) because the same stock_code appears with several
-    # different descriptions in the raw data.
-    con.execute("""
-        CREATE TABLE dim_product AS
-        SELECT
-            stock_code,
-            mode(description)                          AS description,
-            SUM(quantity) FILTER (WHERE quantity > 0)  AS units_sold,
-            SUM(revenue)  FILTER (WHERE quantity > 0)  AS gross_revenue
-        FROM sales
-        GROUP BY stock_code
-    """)
+            # Customers with no ID are excluded (22.8% of rows). Unavoidable - we
+            # cannot tell those orders apart.
+            con.execute("""
+                CREATE TABLE dim_customer AS
+                SELECT
+                    customer_id,
+                    mode(country)     AS country,
+                    MIN(invoice_date) AS first_order,
+                    MAX(invoice_date) AS last_order,
+                    COUNT(DISTINCT invoice_no) FILTER (WHERE NOT is_cancellation) AS orders,
+                    SUM(revenue)      AS net_revenue
+                FROM sales
+                WHERE customer_id IS NOT NULL
+                GROUP BY customer_id
+            """)
 
-    # Customers with no ID are excluded (22.8% of rows). Unavoidable - we
-    # cannot tell those orders apart.
-    con.execute("""
-        CREATE TABLE dim_customer AS
-        SELECT
-            customer_id,
-            mode(country)     AS country,
-            MIN(invoice_date) AS first_order,
-            MAX(invoice_date) AS last_order,
-            COUNT(DISTINCT invoice_no) FILTER (WHERE NOT is_cancellation) AS orders,
-            SUM(revenue)      AS net_revenue
-        FROM sales
-        WHERE customer_id IS NOT NULL
-        GROUP BY customer_id
-    """)
+            for table in ["sales", "dim_month", "dim_product", "dim_customer"]:
+                n = con.execute("SELECT COUNT(*) FROM " + table).fetchone()[0]
+                print("{:<15} {:>10,} rows".format(table, n))
 
-    for table in ["sales", "dim_month", "dim_product", "dim_customer"]:
-        n = con.execute("SELECT COUNT(*) FROM " + table).fetchone()[0]
-        print("{:<15} {:>10,} rows".format(table, n))
-
-    con.close()
+        smoke_test(pending)
+        os.replace(pending, DB)
 
 
-def smoke_test():
+
+def smoke_test(database=None):
     """Reopen read-only and check two answers we already know."""
-    con = duckdb.connect(DB, read_only=True)
+    con = duckdb.connect(database or DB, read_only=True)
 
     november = con.execute("""
         SELECT ROUND(net_revenue, 2) FROM dim_month WHERE invoice_month = '2011-11'
@@ -199,11 +203,17 @@ def smoke_test():
         SELECT ROUND(SUM(revenue), 2) FROM sales
         WHERE NOT is_cancellation AND invoice_month = '2011-11'
     """).fetchone()[0]
+    if november != 1_503_866.78 or same != november:
+        con.close()
+        raise ValueError("Monthly revenue no longer matches KPI 1 or the agreed November value")
     print("agrees with WHERE NOT is_cancellation:", same == november)
 
     december_days = con.execute("""
         SELECT trading_days FROM dim_month WHERE invoice_month = '2011-12'
     """).fetchone()[0]
+    if december_days != 8:
+        con.close()
+        raise ValueError("December 2011 should have 8 trading days")
     print("December 2011 trading days:", december_days, " (expected 8)")
 
     # The database itself refuses writes, not just our Python guard.
@@ -220,7 +230,6 @@ def main():
     df = clean(load_raw())
     check(df)
     build_tables(df)
-    smoke_test()
     print("\nDatabase written to", os.path.normpath(DB))
 
 

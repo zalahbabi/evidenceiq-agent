@@ -1,7 +1,6 @@
 # EvidenceIQ evaluation benchmark
 #
-# Target: 30 questions. These are the first 15.
-# Split so far: 5 easy · 5 medium · 2 hard · 3 trick
+# 30 questions: 10 easy · 11 medium · 4 hard · 5 trick.
 #
 # CONVENTIONS
 #   - "revenue" always means KPI 1: SUM(revenue) WHERE NOT is_cancellation.
@@ -179,6 +178,7 @@ questions:
     answerable: true
     gt_value: 1503866.78
     gt_answer: "November 2011, GBP 1,503,866.78 over 26 trading days"
+    optional_columns: [trading_days]  # Useful context, not explicitly requested.
     gt_sql: |
       SELECT invoice_month, ROUND(net_revenue, 2) AS revenue, trading_days
       FROM dim_month
@@ -499,7 +499,9 @@ questions:
     gt_answer: "March 2010 and March 2011 are tied on 27 trading days"
     gt_sql: |
       SELECT invoice_month, trading_days
-      FROM dim_month ORDER BY trading_days DESC, invoice_month;
+      FROM dim_month
+      WHERE trading_days = (SELECT MAX(trading_days) FROM dim_month)
+      ORDER BY invoice_month;
     expected_tool: run_sql
     expected_chart: none
     kpi: null
@@ -514,6 +516,7 @@ questions:
     difficulty: hard
     answerable: true
     gt_value: 13445.60
+    required_columns: [difference]  # The question asks for the difference in pounds.
     also_accept: [6.72]             # the same gap as a percentage
     gt_answer: "Yes - Germany GBP 213,472.66 against France GBP 200,027.06, a
                 difference of GBP 13,445.60 (6.72%)."

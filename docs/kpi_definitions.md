@@ -114,7 +114,7 @@ of the usual 26. Never compare it as a full month. There is a column
 dim_month.is_complete_month to check.
 
 Months have different numbers of trading days. March 2011 had 27 and April had 21.
-Revenue fell 25% in total but only about 7% per trading day. Always say the day
+Revenue fell 25% in total but only about 3.6% per trading day. Always say the day
 count.
 
 December is the busiest month but the shop stops trading around the 23rd, so the
@@ -127,3 +127,12 @@ pricing or competitors. We can say what contributed to a change, not what caused
 
 We do not forecast. Two years of one shop's sales is not enough to predict the
 future, so EvidenceIQ should refuse instead of guessing.
+
+## Product return value rate (diagnostic)
+
+For the return-rate comparison in notebook 02, apply `is_product AND NOT
+is_outlier` to **both** the negative-revenue numerator and the positive-revenue
+denominator. Retain cancellation rows in the numerator. For 2011, this gives
+2.36%, versus 8.35% for all items. This is a returned-value ratio, distinct from
+the cancellation-invoice KPI above. Filtering products only in the numerator
+mixes populations and understates the rate (2.22%).
