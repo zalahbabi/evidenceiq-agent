@@ -32,7 +32,8 @@ Tiers 2 and 3 and labelled separately in evaluation; assess model-generated
 answers separately when measuring the effect of verification.
 
 Read [how the tiers work](docs/architecture.md) or browse the
-[essential documentation](docs/README.md).
+[essential documentation](docs/README.md). For concrete comparisons, see
+[example questions and results](#example-questions-and-results).
 
 ---
 
@@ -221,12 +222,100 @@ answer **we worked out ourselves in SQL**, plus the query that produced it.
 **cannot** answer. Those last five matter most — a good system refuses; a bad
 one invents a profit margin.
 
-**A question does not count until `reviewed_by` is filled in by someone who
-did not write it.** Re-run the `gt_sql`, confirm the number, put your name in.
+**Before treating the scores as final, every question needs `reviewed_by` filled
+in by someone who did not write it.** Re-run its `gt_sql`, confirm the result,
+and record the reviewer's name.
 
 `06_evaluation.ipynb` runs everything and writes `eval/results/notebook_run/`.
 Use `python tests/run_examples.py --full --publish` to save a versioned report
 and update the dashboard.
+
+### Recorded comparison
+
+The **17 September 2026** run used local `gemma3:4b` on all 30 questions in
+each tier. A pass requires the requested facts and additional numerical claims
+to satisfy the scorer's checks. These are development results: independent
+benchmark review is still **0/30**, and human usefulness ratings have not been collected.
+
+| Measure | Tier 1: no data | Tier 2: tools | Tier 3: tools + verification |
+|---|---:|---:|---:|
+| All answerable questions | 0/25 (0%) | 16/25 (64%) | **20/25 (80%)** |
+| Same 14 questions requiring model-written queries in Tiers 2/3 | 0/14 (0%) | 5/14 (35.7%) | **9/14 (64.3%)** |
+| Same 11 questions using shared direct queries in Tiers 2/3 | 0/11 (0%) | 11/11 (100%) | 11/11 (100%) |
+| Correct refusals | 3/5 | 5/5 | 5/5 |
+| Average time per question, including refusals | 8.8 seconds | 11.0 seconds | 23.3 seconds |
+
+Tier 3 passed four more benchmark questions than Tier 2 in this run, at a
+higher average response time. The shared direct-query results are not evidence
+of better model reasoning. With the same maximum of two retries, the Tier 2
+control passed **6/14** model-query cases, versus Tier 3's **9/14** in the main run.
+The control retries execution failures only; Tier 3 also retries verification
+and completeness failures.
+On seven additional questions with different wording or dates, Tier 2 passed
+**2/7** and Tier 3 passed **4/7**. These separate development runs show an
+improvement, but do not isolate verification from retries or establish performance
+on an independent test set.
+
+Sources: [complete saved run](eval/results/validated_checks_2026-09-17.json),
+[equal-retry control](eval/results/tier2_retry_control_2026-09-17.json), and
+[additional questions](eval/results/generalization_checks_2026-09-17.json).
+
+### Example questions and results
+
+In **Ask the analyst**, paste a question below and run it once in each tier.
+The table summarizes actual saved responses, rather than promising identical
+answers on every rerun. Tiers were run separately; Tier 3 does not simply receive
+and correct the saved Tier 2 answer. **Pass/Fail** refers to the benchmark scorer.
+
+| Question to try | Tier 1 result | Tier 2 result | Tier 3 result |
+|---|---|---|---|
+| **q17:** How much revenue came from France in 2011? | **Fail:** says it lacks the sales data. | **Fail:** its incorrect country filter is rejected; no answer. | **Pass:** repairs the country filter and retains the supported answer: **£200,027.06**, excluding cancellations. |
+| **q24:** What were the top five countries by revenue in 2011? | **Fail:** offers a speculative ranking led by the United States, explicitly without actual data. | **Fail:** retrieves correct totals but changes four of them in its written answer. | **Pass:** returns the correct full ranking and leads with the UK at **£8,244,599.81**. See the detailed comparison below. |
+| **q08:** What share of our 2011 revenue came from the UK? | **Fail:** estimates approximately **75%** without supporting data. | **Pass:** reports **84.04611845311553%**. | **Pass:** reports **84.05%**, explains the concentration of revenue in the UK, and suggests follow-up questions. |
+| **q11:** Did November 2011 beat October 2011 on revenue, and by what percentage? | **Fail:** cannot give a numerical answer. | **Pass:** lists both monthly totals and day counts, then reports a **30.63%** increase. | **Pass:** leads with the increase and explains that both months had the same number of trading days. |
+| **q30:** Which promotion generated the most revenue? | **Fail:** claims it can identify the promotion with the highest sales volume, despite missing promotion data. | **Pass:** refuses because promotion data is unavailable. | **Pass:** gives the same refusal, explains the missing information, and suggests an answerable country-revenue question. |
+| **q26:** Which month had the most trading days? | **Fail:** confuses calendar days with recorded trading days. | **Fail:** reports December 2011 with **8 days**. | **Fail:** also reports December 2011 with **8 days**; it does not catch the query's minimum/maximum mistake. |
+
+q08, q17, q24 and q26 use model-written queries in the grounded tiers. q11 uses
+a **shared direct query**, so its benefit here is a clearer explanation, not
+higher numerical accuracy. q30 uses a **shared refusal rule**; it is not a
+Tier 3-only safeguard.
+
+#### Worked example: correct query, incorrect written answer
+
+For **q24**, Tier 2's query results and structured claims contain the right
+numbers, but its public answer adds incorrect digits. Tier 3 builds its wording
+and detailed figures from checked evidence. Its full ranking matches the saved
+benchmark reference, with cancellations excluded:
+
+| Country | Tier 2 written answer | Tier 3 detailed figures / reference value |
+|---|---:|---:|
+| United Kingdom | £8,244,599.81 | £8,244,599.81 |
+| Netherlands | £2,766,611.86 | **£276,661.86** |
+| EIRE | £2,731,072.26 | **£273,107.26** |
+| Germany | £2,134,722.66 | **£213,472.66** |
+| France | £2,000,270.06 | **£200,027.06** |
+
+This illustrates why a successful database query alone is not enough: the
+final written answer also needs to agree with its evidence.
+
+#### Worked example: explaining what the numbers mean
+
+For **q11**, both grounded tiers are numerically correct. Tier 3 adds context:
+
+> Yes. Revenue was higher in November 2011 than in October 2011, a change of 30.63%. Cancellations are excluded.
+
+Its **What this means** section explains that the months had equal trading-day
+counts, so the difference is not explained by reporting length; the figures do
+not establish its cause. It then suggests: **“What was revenue per trading day
+in October 2011 and November 2011?”** The supporting totals remain expandable.
+
+**Where verification still fails:** q26's correct answer is **March 2010 and
+March 2011, with 27 trading days each**. The model instead queried the minimum.
+Tier 3 verified the returned cells but missed that the query answered the
+opposite question. Country comparisons and share denominators also have known
+failures. See [validation and remaining limitations](docs/validation.md) before
+presenting these examples as evidence of reliability.
 
 ---
 
