@@ -1,10 +1,11 @@
 # EvidenceIQ
 
-An AI data analyst that answers business questions **and proves how it got the answer**.
+A local retail analyst that **checks numerical evidence before showing verified answers**.
 
-Standard LLMs produce a confident, well-written number that nobody calculated.
-EvidenceIQ runs a real query, then checks every figure in its own written answer
-against what that query returned. If a claim isn't backed by evidence, it doesn't ship.
+EvidenceIQ queries real data, checks source cells and arithmetic, and builds
+Tier 3's final wording from supported facts. Its business-rule and completeness
+checks cover common mistakes; they do not prove every free-form query
+interprets the question correctly.
 
 **Dataset:** Online Retail II — a UK online gift wholesaler, Dec 2009 – Dec 2011,
 1,033,030 transaction lines.
@@ -19,15 +20,19 @@ We build the same analyst three times and compare them on the same questions.
 
 | Tier | What it can do | What we expect |
 |---|---|---|
-| 1 | Nothing but the question — no data access | invents numbers |
-| 2 | Writes and runs real SQL / Python | real numbers, unchecked wording |
+| 1 | Nothing but the question — no data access | may invent numbers or refuse |
+| 2 | Common KPI query patterns, otherwise model-driven SQL / calculations | real data, unchecked wording |
 | 3 | Tier 2 + our checking layer | only evidence-backed claims are shown |
 
-Tier 1 → 2 measures what **using real data** is worth.
-Tier 2 → 3 measures what **checking** is worth.
-That comparison is the point of the project.
+Tier 1 → 2 compares a data-free model with a system that adds data, tools,
+query patterns and scope rules. Tier 2 → 3 adds verification, fact recovery and
+repair attempts. These are system comparisons; the optional equal-retry control
+helps separate extra attempts from verification. Common query patterns are shared by
+Tiers 2 and 3 and labelled separately in evaluation; assess model-generated
+answers separately when measuring the effect of verification.
 
-Full explanation: **`docs/tiers_explained.pdf`**
+Read [how the tiers work](docs/architecture.md) or browse the
+[essential documentation](docs/README.md).
 
 ---
 
@@ -64,11 +69,70 @@ If you see different numbers, don't carry on. A cleaning rule changed, which
 means every ground-truth answer in `eval/benchmark.yaml` may now be wrong.
 See `docs/data_dictionary.md`.
 
-For the agent, you also need a local model:
+For the agent, install Ollama and keep its app or local service running. Then
+download the local model:
 
 ```bash
 ollama pull gemma3:4b
-pip install ollama
+```
+
+---
+
+## Dashboard
+
+```bash
+streamlit run app/dashboard.py
+```
+
+Open the local address printed in the terminal (normally `http://localhost:8501`).
+
+- **Overview:** revenue, orders, average order value, customers, monthly trends,
+  country revenue and top products. Year and market filters apply throughout.
+  Complete months are selected by default; turn the switch off to include the
+  partial December 2011 period. Monthly data can be downloaded as CSV.
+- **Ask the analyst:** select one of the three tiers, ask a question and inspect
+  the executed queries. Tier 3 leads with an answer, explains what the results
+  mean and suggests useful next steps. Select a suggested question to fill the
+  input, then choose Analyze to run it. Detailed figures and supporting queries
+  are expandable, and the download contains the same checked answer and
+  explanation. Custom model-driven questions require Ollama
+  with `gemma3:4b`; recognised query patterns run directly against the database.
+- **Evaluation:** reads `eval/results/all_runs.csv`, published by the live example
+  runner with `--full --publish`. It shows recorded results and human-review status,
+  or an empty state when no results exist.
+
+The overview works without Ollama. It queries DuckDB directly and caches only
+small aggregate results, invalidating the cache when the database changes.
+All computation is local; the app does not require a hosted API or remote fonts.
+
+The dashboard loads only definitions and constants from notebook 06; it does
+not run notebook demos or evaluation loops. The notebooks remain self-contained,
+with ordinary dictionaries and a deterministic verifier.
+
+### Checks
+
+```bash
+python -m pytest tests -q
+python tests/run_examples.py --timeout 180         # selected examples
+python tests/run_examples.py --full --timeout 180 --publish  # all 90 runs + dashboard
+```
+
+The tests exercise notebook code, database ground truths and dashboard interactions.
+Data-dependent checks require the local dataset. See
+[validation and limitations](docs/validation.md) for recorded results, remaining
+failures and links to the saved evidence. Every live report gets its own CSV,
+summary and chart. `--publish` updates the dashboard after a complete run and
+archives the previous results.
+
+Additional checks:
+
+```bash
+# Different dates and wording; reported separately from the main benchmark
+python tests/run_examples.py --benchmark eval/generalization.yaml --full --tiers 2 3 --timeout 180
+# Tier 2 execution-retry control, without verification
+python tests/run_examples.py --full --tiers 2 --tier2-retries 2 --timeout 180
+# Re-evaluate saved outputs with the current scorer, without model calls
+python tests/run_examples.py --rescore eval/results/validated_checks_2026-09-16.json
 ```
 
 ---
@@ -84,7 +148,7 @@ Run them in order. Each one builds on the last.
 | `03_baseline_llm.ipynb` | **Tier 1** — the model with no data access |
 | `04_tier2_agent.ipynb` | **Tier 2** — the model with SQL and Python tools |
 | `05_tier3_verification.ipynb` | **Tier 3** — the checking layer |
-| `06_evaluation.ipynb` | all 3 tiers × 15 questions → the scoreboard |
+| `06_evaluation.ipynb` | all 3 tiers × 30 questions → the scoreboard |
 
 `src/build_db.py` is the script version of notebook 02. The notebook explains
 it, the script is what you actually run.
@@ -94,18 +158,19 @@ it, the script is what you actually run.
 ## Layout
 
 ```
-app/          the Streamlit app (week 6)
+app/          Streamlit retail dashboard, analyst workspace and evaluation view
 data/         raw/ and processed/ - both gitignored, both rebuildable
-docs/         data dictionary, KPI definitions, the tier explainer
+docs/         essential guides: architecture, data, KPIs and validation
+archive/      historical documents and original teammate implementation
 eval/         benchmark.yaml and results/
 notebooks/    01 to 06, in order
 src/          build_db.py
 ```
 
 **Each notebook is self-contained.** It defines every function it needs, so you
-can open any one of them and run it top to bottom without setting anything up
-first. Notebooks 05 and 06 start with a setup cell that repeats the code from
-the notebooks before them.
+do not need to execute earlier notebooks in the same kernel. Complete the data,
+package and model setup first, and use `notebooks/` as the kernel's working
+directory. Notebooks 05 and 06 repeat the definitions from earlier notebooks.
 
 The trade-off: if you fix a bug in `run_sql` or `verify`, **fix it in every
 notebook that defines it**. Notebook 04 defines the tools, 05 adds the checker,
@@ -152,14 +217,16 @@ Full detail in `01_eda.ipynb`. The short version:
 `eval/benchmark.yaml` holds the questions we score against. Each one has the
 answer **we worked out ourselves in SQL**, plus the query that produced it.
 
-15 questions so far, target 30: 5 easy, 5 medium, 2 hard, 3 that the data
-**cannot** answer. Those last three matter most — a good system refuses; a bad
+30 questions: 10 easy, 11 medium, 4 hard, and 5 that the data
+**cannot** answer. Those last five matter most — a good system refuses; a bad
 one invents a profit margin.
 
 **A question does not count until `reviewed_by` is filled in by someone who
 did not write it.** Re-run the `gt_sql`, confirm the number, put your name in.
 
-`06_evaluation.ipynb` runs everything and writes `eval/results/`.
+`06_evaluation.ipynb` runs everything and writes `eval/results/notebook_run/`.
+Use `python tests/run_examples.py --full --publish` to save a versioned report
+and update the dashboard.
 
 ---
 
