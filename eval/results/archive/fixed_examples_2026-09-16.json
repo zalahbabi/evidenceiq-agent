@@ -1,0 +1,1354 @@
+{
+  "started_at": "2026-09-16T06:58:58.600256+00:00",
+  "model": "gemma3:4b",
+  "timeout_seconds": 120,
+  "packages": {
+    "duckdb": "1.5.5",
+    "pandas": "3.0.5",
+    "streamlit": "1.64.0",
+    "sqlglot": "30.18.0",
+    "ollama": "0.6.2"
+  },
+  "scope": "Selected examples; not the full benchmark.",
+  "results": [
+    {
+      "id": "q01",
+      "tier": 3,
+      "question": "What was our total revenue in 2011?",
+      "expected": [
+        {
+          "revenue": 9809614.01
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "What was our total revenue in 2011?",
+        "tier": 3,
+        "findings": "Revenue was \u00a39,809,614.01. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "Revenue was \u00a39,809,614.01.",
+            "value": 9809614.01,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+            "ok": true,
+            "rows": [
+              {
+                "revenue": 9809614.01
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.0,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "Revenue was \u00a39,809,614.01.",
+          "value": 9809614.01,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+          "problem": null
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.49,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.49,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q04",
+      "tier": 3,
+      "question": "How many customers bought from us in 2011?",
+      "expected": [
+        {
+          "customers": 4220
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many customers bought from us in 2011?",
+        "tier": 3,
+        "findings": "There were 4,220 identified customers. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "There were 4,220 identified customers.",
+            "value": 4220,
+            "unit": "customers",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "customers",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT COUNT(DISTINCT customer_id) AS customers FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND customer_id IS NOT NULL",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "customer_id",
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011 AND NOT customer_id IS NULL"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded. Transactions without a customer ID are excluded from this customer count.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(DISTINCT customer_id) AS customers FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND customer_id IS NOT NULL",
+            "ok": true,
+            "rows": [
+              {
+                "customers": 4220
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.0,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "There were 4,220 identified customers.",
+          "value": 4220,
+          "unit": "customers",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "customers",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT COUNT(DISTINCT customer_id) AS customers FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND customer_id IS NOT NULL",
+          "problem": null
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.5,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.5,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q07",
+      "tier": 3,
+      "question": "List the five products that generated the most revenue in 2011, with the revenue for each.",
+      "expected": [
+        {
+          "stock_code": "22423",
+          "description": "REGENCY CAKESTAND 3 TIER",
+          "revenue": 146461.78
+        },
+        {
+          "stock_code": "47566",
+          "description": "PARTY BUNTING",
+          "revenue": 98237.49
+        },
+        {
+          "stock_code": "85123A",
+          "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+          "revenue": 94027.39
+        },
+        {
+          "stock_code": "85099B",
+          "description": "JUMBO BAG RED RETROSPOT",
+          "revenue": 90140.66
+        },
+        {
+          "stock_code": "23084",
+          "description": "RABBIT NIGHT LIGHT",
+          "revenue": 66870.03
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "List the five products that generated the most revenue in 2011, with the revenue for each.",
+        "tier": 3,
+        "findings": "REGENCY CAKESTAND 3 TIER: \u00a3146,461.78. PARTY BUNTING: \u00a398,237.49. WHITE HANGING HEART T-LIGHT HOLDER: \u00a394,027.39. JUMBO BAG RED RETROSPOT: \u00a390,140.66. RABBIT NIGHT LIGHT: \u00a366,870.03. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "REGENCY CAKESTAND 3 TIER: \u00a3146,461.78.",
+            "value": 146461.78,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "problem": null
+          },
+          {
+            "text": "PARTY BUNTING: \u00a398,237.49.",
+            "value": 98237.49,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 1,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "problem": null
+          },
+          {
+            "text": "WHITE HANGING HEART T-LIGHT HOLDER: \u00a394,027.39.",
+            "value": 94027.39,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 2,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "problem": null
+          },
+          {
+            "text": "JUMBO BAG RED RETROSPOT: \u00a390,140.66.",
+            "value": 90140.66,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 3,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "problem": null
+          },
+          {
+            "text": "RABBIT NIGHT LIGHT: \u00a366,870.03.",
+            "value": 66870.03,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 4,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "stock_code",
+          "is_product",
+          "is_outlier",
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011 AND is_product AND NOT is_outlier"
+        ],
+        "chart": {
+          "type": "bar",
+          "source_tool_call": 0,
+          "x": "description",
+          "y": "revenue",
+          "title": "Leading products"
+        },
+        "insufficient_data": false,
+        "limitations": "Cancellations, non-product lines and flagged outliers are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "ok": true,
+            "rows": [
+              {
+                "stock_code": "22423",
+                "description": "REGENCY CAKESTAND 3 TIER",
+                "revenue": 146461.78
+              },
+              {
+                "stock_code": "47566",
+                "description": "PARTY BUNTING",
+                "revenue": 98237.49
+              },
+              {
+                "stock_code": "85123A",
+                "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+                "revenue": 94027.39
+              },
+              {
+                "stock_code": "85099B",
+                "description": "JUMBO BAG RED RETROSPOT",
+                "revenue": 90140.66
+              },
+              {
+                "stock_code": "23084",
+                "description": "RABBIT NIGHT LIGHT",
+                "revenue": 66870.03
+              }
+            ],
+            "error": null
+          },
+          {
+            "n": 1,
+            "tool": "make_chart",
+            "code": "{\"type\": \"bar\", \"source_tool_call\": 0, \"x\": \"description\", \"y\": \"revenue\", \"title\": \"Leading products\"}",
+            "ok": true,
+            "rows": [
+              {
+                "type": "bar",
+                "source_tool_call": 0,
+                "x": "description",
+                "y": "revenue",
+                "title": "Leading products"
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.0,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "REGENCY CAKESTAND 3 TIER: \u00a3146,461.78.",
+          "value": 146461.78,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+          "problem": null
+        },
+        {
+          "text": "PARTY BUNTING: \u00a398,237.49.",
+          "value": 98237.49,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 1,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+          "problem": null
+        },
+        {
+          "text": "WHITE HANGING HEART T-LIGHT HOLDER: \u00a394,027.39.",
+          "value": 94027.39,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 2,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+          "problem": null
+        },
+        {
+          "text": "JUMBO BAG RED RETROSPOT: \u00a390,140.66.",
+          "value": 90140.66,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 3,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+          "problem": null
+        },
+        {
+          "text": "RABBIT NIGHT LIGHT: \u00a366,870.03.",
+          "value": 66870.03,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 4,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+          "problem": null
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.51,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.51,
+        "error": null,
+        "claims": 5,
+        "supported": 5,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 2,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q11",
+      "tier": 3,
+      "question": "Did November 2011 beat October 2011 on revenue, and by what percentage?",
+      "expected": [
+        {
+          "pct_change": 30.63
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "Did November 2011 beat October 2011 on revenue, and by what percentage?",
+        "tier": 3,
+        "findings": "In 2011-10, revenue was \u00a31,151,263.73. In 2011-10, there were 26 trading days. In 2011-11, revenue was \u00a31,503,866.78. In 2011-11, there were 26 trading days. Yes, revenue increased by 30.63%. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "In 2011-10, revenue was \u00a31,151,263.73.",
+            "value": 1151263.73,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT invoice_month, ROUND(net_revenue,2) AS revenue, trading_days, is_complete_month FROM dim_month WHERE invoice_month IN ('2011-10', '2011-11') ORDER BY invoice_month",
+            "problem": null
+          },
+          {
+            "text": "In 2011-10, there were 26 trading days.",
+            "value": 26,
+            "unit": "days",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "trading_days",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT invoice_month, ROUND(net_revenue,2) AS revenue, trading_days, is_complete_month FROM dim_month WHERE invoice_month IN ('2011-10', '2011-11') ORDER BY invoice_month",
+            "problem": null
+          },
+          {
+            "text": "In 2011-11, revenue was \u00a31,503,866.78.",
+            "value": 1503866.78,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 1,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT invoice_month, ROUND(net_revenue,2) AS revenue, trading_days, is_complete_month FROM dim_month WHERE invoice_month IN ('2011-10', '2011-11') ORDER BY invoice_month",
+            "problem": null
+          },
+          {
+            "text": "In 2011-11, there were 26 trading days.",
+            "value": 26,
+            "unit": "days",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 1,
+            "column": "trading_days",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT invoice_month, ROUND(net_revenue,2) AS revenue, trading_days, is_complete_month FROM dim_month WHERE invoice_month IN ('2011-10', '2011-11') ORDER BY invoice_month",
+            "problem": null
+          },
+          {
+            "text": "Yes, revenue increased by 30.63%.",
+            "value": 30.6275,
+            "unit": "%",
+            "from_call": 0,
+            "calc": "pct_change",
+            "inputs": [
+              1503866.78,
+              1151263.73
+            ],
+            "input_cells": [
+              {
+                "from_call": 0,
+                "row": 1,
+                "column": "revenue"
+              },
+              {
+                "from_call": 0,
+                "row": 0,
+                "column": "revenue"
+              }
+            ],
+            "status": "supported",
+            "evidence": "Recalculated pct_change from calls [0]",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "invoice_month",
+          "trading_days",
+          "is_complete_month",
+          "net_revenue"
+        ],
+        "filters_used": [
+          "invoice_month IN ('2011-10', '2011-11')"
+        ],
+        "chart": {
+          "type": "line",
+          "source_tool_call": 0,
+          "x": "invoice_month",
+          "y": "revenue",
+          "title": "Monthly revenue"
+        },
+        "insufficient_data": false,
+        "limitations": "Revenue excludes cancellations. Trading-day counts are shown for context.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT invoice_month, ROUND(net_revenue,2) AS revenue, trading_days, is_complete_month FROM dim_month WHERE invoice_month IN ('2011-10', '2011-11') ORDER BY invoice_month",
+            "ok": true,
+            "rows": [
+              {
+                "invoice_month": "2011-10",
+                "revenue": 1151263.73,
+                "trading_days": 26,
+                "is_complete_month": true
+              },
+              {
+                "invoice_month": "2011-11",
+                "revenue": 1503866.78,
+                "trading_days": 26,
+                "is_complete_month": true
+              }
+            ],
+            "error": null
+          },
+          {
+            "n": 1,
+            "tool": "run_python",
+            "code": "(1503866.78 - 1151263.73) / 1151263.73 * 100",
+            "ok": true,
+            "rows": [
+              {
+                "result_name": "Revenue change",
+                "value": 30.6275,
+                "unit": "%",
+                "operation": "pct_change",
+                "inputs": [
+                  1503866.78,
+                  1151263.73
+                ]
+              }
+            ],
+            "error": null
+          },
+          {
+            "n": 2,
+            "tool": "make_chart",
+            "code": "{\"type\": \"line\", \"source_tool_call\": 0, \"x\": \"invoice_month\", \"y\": \"revenue\", \"title\": \"Monthly revenue\"}",
+            "ok": true,
+            "rows": [
+              {
+                "type": "line",
+                "source_tool_call": 0,
+                "x": "invoice_month",
+                "y": "revenue",
+                "title": "Monthly revenue"
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.0,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "In 2011-10, revenue was \u00a31,151,263.73.",
+          "value": 1151263.73,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT invoice_month, ROUND(net_revenue,2) AS revenue, trading_days, is_complete_month FROM dim_month WHERE invoice_month IN ('2011-10', '2011-11') ORDER BY invoice_month",
+          "problem": null
+        },
+        {
+          "text": "In 2011-10, there were 26 trading days.",
+          "value": 26,
+          "unit": "days",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "trading_days",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT invoice_month, ROUND(net_revenue,2) AS revenue, trading_days, is_complete_month FROM dim_month WHERE invoice_month IN ('2011-10', '2011-11') ORDER BY invoice_month",
+          "problem": null
+        },
+        {
+          "text": "In 2011-11, revenue was \u00a31,503,866.78.",
+          "value": 1503866.78,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 1,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT invoice_month, ROUND(net_revenue,2) AS revenue, trading_days, is_complete_month FROM dim_month WHERE invoice_month IN ('2011-10', '2011-11') ORDER BY invoice_month",
+          "problem": null
+        },
+        {
+          "text": "In 2011-11, there were 26 trading days.",
+          "value": 26,
+          "unit": "days",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 1,
+          "column": "trading_days",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT invoice_month, ROUND(net_revenue,2) AS revenue, trading_days, is_complete_month FROM dim_month WHERE invoice_month IN ('2011-10', '2011-11') ORDER BY invoice_month",
+          "problem": null
+        },
+        {
+          "text": "Yes, revenue increased by 30.63%.",
+          "value": 30.6275,
+          "unit": "%",
+          "from_call": 0,
+          "calc": "pct_change",
+          "inputs": [
+            1503866.78,
+            1151263.73
+          ],
+          "input_cells": [
+            {
+              "from_call": 0,
+              "row": 1,
+              "column": "revenue"
+            },
+            {
+              "from_call": 0,
+              "row": 0,
+              "column": "revenue"
+            }
+          ],
+          "status": "supported",
+          "evidence": "Recalculated pct_change from calls [0]",
+          "problem": null
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.49,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.49,
+        "error": null,
+        "claims": 5,
+        "supported": 5,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 3,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q20",
+      "tier": 3,
+      "question": "Is December 2011 a complete month in the dataset?",
+      "expected": [
+        {
+          "invoice_month": "2011-12",
+          "trading_days": 8,
+          "is_complete_month": false
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "Is December 2011 a complete month in the dataset?",
+        "tier": 3,
+        "findings": "The month is incomplete. It contains 8 trading days.",
+        "claims": [
+          {
+            "text": "The month is incomplete.",
+            "value": false,
+            "unit": "",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "is_complete_month",
+            "kind": "boolean",
+            "status": "supported",
+            "evidence": "Exact boolean SQL cell",
+            "problem": null
+          },
+          {
+            "text": "It contains 8 trading days.",
+            "value": 8,
+            "unit": "days",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "trading_days",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT invoice_month, trading_days, is_complete_month FROM dim_month WHERE invoice_month = '2011-12'",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "invoice_month",
+          "trading_days",
+          "is_complete_month"
+        ],
+        "filters_used": [
+          "invoice_month = '2011-12'"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "An incomplete month cannot be compared as a full month.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT invoice_month, trading_days, is_complete_month FROM dim_month WHERE invoice_month = '2011-12'",
+            "ok": true,
+            "rows": [
+              {
+                "invoice_month": "2011-12",
+                "trading_days": 8,
+                "is_complete_month": false
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.0,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "The month is incomplete.",
+          "value": false,
+          "unit": "",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "is_complete_month",
+          "kind": "boolean",
+          "status": "supported",
+          "evidence": "Exact boolean SQL cell",
+          "problem": null
+        },
+        {
+          "text": "It contains 8 trading days.",
+          "value": 8,
+          "unit": "days",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "trading_days",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT invoice_month, trading_days, is_complete_month FROM dim_month WHERE invoice_month = '2011-12'",
+          "problem": null
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.49,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.49,
+        "error": null,
+        "claims": 2,
+        "supported": 2,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q13",
+      "tier": 3,
+      "question": "What was our profit margin in 2011?",
+      "expected": [],
+      "status": "PASS",
+      "notes": [
+        "Expected an explicit refusal without numerical claims."
+      ],
+      "answer": {
+        "question": "What was our profit margin in 2011?",
+        "tier": 3,
+        "findings": "This dataset contains sales transactions, but not the cost, promotion or other external data needed to answer this question.",
+        "claims": [],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "insufficient_data": true,
+        "limitations": "This dataset contains sales transactions, but not the cost, promotion or other external data needed to answer this question.",
+        "log": [],
+        "retries": 0,
+        "plan": [],
+        "seconds": 0.0,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [],
+      "model_calls": [],
+      "elapsed_seconds": 0.51,
+      "metrics": {
+        "answerable": false,
+        "correct": null,
+        "refused": true,
+        "route": "model_tools",
+        "seconds": 0.51,
+        "error": null,
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q14",
+      "tier": 3,
+      "question": "How did December 2011 compare with November 2011?",
+      "expected": [
+        {
+          "invoice_month": "2011-11",
+          "revenue": 1503866.78,
+          "trading_days": 26,
+          "is_complete_month": true
+        },
+        {
+          "invoice_month": "2011-12",
+          "revenue": 637808.33,
+          "trading_days": 8,
+          "is_complete_month": false
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Expected an explicit refusal without numerical claims."
+      ],
+      "answer": {
+        "question": "How did December 2011 compare with November 2011?",
+        "tier": 3,
+        "findings": "December 2011 is an incomplete reporting month. A full-month comparison would be misleading; ask for individual totals or revenue per trading day.",
+        "claims": [],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "insufficient_data": true,
+        "limitations": "December 2011 is an incomplete reporting month. A full-month comparison would be misleading; ask for individual totals or revenue per trading day.",
+        "log": [],
+        "retries": 0,
+        "plan": [],
+        "seconds": 0.0,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [],
+      "model_calls": [],
+      "elapsed_seconds": 0.5,
+      "metrics": {
+        "answerable": false,
+        "correct": null,
+        "refused": true,
+        "route": "model_tools",
+        "seconds": 0.5,
+        "error": null,
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 0.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q15",
+      "tier": 3,
+      "question": "What will our revenue be next quarter?",
+      "expected": [],
+      "status": "PASS",
+      "notes": [
+        "Expected an explicit refusal without numerical claims."
+      ],
+      "answer": {
+        "question": "What will our revenue be next quarter?",
+        "tier": 3,
+        "findings": "Forecasting is outside this project's scope. These historical transactions cannot establish future revenue.",
+        "claims": [],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "insufficient_data": true,
+        "limitations": "Forecasting is outside this project's scope. These historical transactions cannot establish future revenue.",
+        "log": [],
+        "retries": 0,
+        "plan": [],
+        "seconds": 0.0,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [],
+      "model_calls": [],
+      "elapsed_seconds": 0.48,
+      "metrics": {
+        "answerable": false,
+        "correct": null,
+        "refused": true,
+        "route": "model_tools",
+        "seconds": 0.48,
+        "error": null,
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q29",
+      "tier": 3,
+      "question": "What was our cost of goods sold in 2011?",
+      "expected": [],
+      "status": "PASS",
+      "notes": [
+        "Expected an explicit refusal without numerical claims."
+      ],
+      "answer": {
+        "question": "What was our cost of goods sold in 2011?",
+        "tier": 3,
+        "findings": "This dataset contains sales transactions, but not the cost, promotion or other external data needed to answer this question.",
+        "claims": [],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "insufficient_data": true,
+        "limitations": "This dataset contains sales transactions, but not the cost, promotion or other external data needed to answer this question.",
+        "log": [],
+        "retries": 0,
+        "plan": [],
+        "seconds": 0.0,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [],
+      "model_calls": [],
+      "elapsed_seconds": 0.49,
+      "metrics": {
+        "answerable": false,
+        "correct": null,
+        "refused": true,
+        "route": "model_tools",
+        "seconds": 0.49,
+        "error": null,
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q30",
+      "tier": 3,
+      "question": "Which promotion generated the most revenue?",
+      "expected": [],
+      "status": "PASS",
+      "notes": [
+        "Expected an explicit refusal without numerical claims."
+      ],
+      "answer": {
+        "question": "Which promotion generated the most revenue?",
+        "tier": 3,
+        "findings": "This dataset contains sales transactions, but not the cost, promotion or other external data needed to answer this question.",
+        "claims": [],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "insufficient_data": true,
+        "limitations": "This dataset contains sales transactions, but not the cost, promotion or other external data needed to answer this question.",
+        "log": [],
+        "retries": 0,
+        "plan": [],
+        "seconds": 0.0,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [],
+      "model_calls": [],
+      "elapsed_seconds": 0.5,
+      "metrics": {
+        "answerable": false,
+        "correct": null,
+        "refused": true,
+        "route": "model_tools",
+        "seconds": 0.5,
+        "error": null,
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q01",
+      "tier": 1,
+      "question": "What was our total revenue in 2011?",
+      "expected": [
+        {
+          "revenue": 9809614.01
+        }
+      ],
+      "status": "FAIL",
+      "notes": [
+        "ConnectionError: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download"
+      ],
+      "error": "ConnectionError: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download",
+      "elapsed_seconds": 0.6,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": false,
+        "route": "model",
+        "seconds": 0.6,
+        "error": "ConnectionError: Failed to connect to Ollama. Please check that Ollama is downloaded, running and accessible. https://ollama.com/download",
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 0.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q01",
+      "tier": 2,
+      "question": "What was our total revenue in 2011?",
+      "expected": [
+        {
+          "revenue": 9809614.01
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "What was our total revenue in 2011?",
+        "tier": 2,
+        "findings": "Revenue was \u00a39,809,614.01. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "Revenue was \u00a39,809,614.01.",
+            "value": 9809614.01,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "revenue",
+            "kind": "number"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+            "ok": true,
+            "rows": [
+              {
+                "revenue": 9809614.01
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.02,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern"
+      },
+      "visible_claims": [
+        {
+          "text": "Revenue was \u00a39,809,614.01.",
+          "value": 9809614.01,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "revenue",
+          "kind": "number"
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.5,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.5,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    }
+  ]
+}

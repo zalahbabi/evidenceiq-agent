@@ -1,0 +1,1 @@
+These are historical development checks, not the current scoreboard. The interrupted run stopped after a new issue was found. The initial fixed-examples run could not access Ollama inside the sandbox; later checks used the actual local model. See ../full_checks_2026-09-16.json, ../final_regression_checks_2026-09-16.json and the final validation report for the completed checks.

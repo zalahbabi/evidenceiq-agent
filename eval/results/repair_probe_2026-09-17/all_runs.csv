@@ -1,0 +1,7 @@
+id,tier,claims,supported,flagged,unsupported,undeclared,evidence_coverage,unsupported_rate,queries,sql_successes,queries_ok,query_history_complete,tool_selection_correct,chart_applicable,chart_correct,refusal_correct,model_calls,input_tokens,output_tokens,correct,requested_facts_correct,contradicted_claims,unassessed_extra_claims,undeclared_displayed_numbers,factual_errors,unassessed_claims,displayed_claims,displayed_supported,displayed_unsupported,displayed_unsupported_rate,refused,retries,route,api_cost_usd,answerable,difficulty,seconds,error,reviewed_by,usefulness_rating
+q08,2,3,3,0,0,1,1.0,0.0,1,1,1.0,True,1.0,True,0.0,,3,4580,476,0.0,1.0,0,0,1,[],[],3,3,0,0.0,False,0,model_tools,0.0,True,medium,12.06,,,
+q08,3,6,4,0,2,0,0.6666666666666666,0.3333333333333333,3,3,1.0,True,1.0,True,0.0,,11,18546,1654,1.0,1.0,0,0,0,[],[],4,4,0,0.0,False,2,model_tools,0.0,True,medium,27.79,,,
+q22,2,0,0,0,0,0,,,2,0,0.0,True,1.0,True,0.0,,3,5668,173,0.0,0.0,0,0,0,[],[],0,0,0,,False,0,model_tools,0.0,True,medium,4.29,,,
+q22,3,0,0,0,0,0,,,6,0,0.0,True,1.0,True,0.0,,9,17792,523,0.0,0.0,0,0,0,[],[],0,0,0,,False,2,model_tools,0.0,True,medium,12.68,,,
+q26,2,2,0,0,2,0,0.0,1.0,1,1,1.0,True,1.0,False,,,3,4859,323,1.0,1.0,0,0,0,[],[],2,0,2,1.0,False,0,model_tools,0.0,True,medium,6.56,,,
+q26,3,27,25,0,2,0,0.9259259259259259,0.07407407407407407,3,3,1.0,True,1.0,False,,,10,16380,1059,1.0,1.0,0,0,0,[],[],25,25,0,0.0,False,2,model_tools,0.0,True,medium,19.38,,,

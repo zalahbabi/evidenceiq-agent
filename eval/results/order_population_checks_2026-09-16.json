@@ -1,0 +1,778 @@
+{
+  "started_at": "2026-09-16T08:01:04.965399+00:00",
+  "model": "gemma3:4b",
+  "timeout_seconds": 180,
+  "packages": {
+    "duckdb": "1.5.5",
+    "pandas": "3.0.5",
+    "streamlit": "1.64.0",
+    "sqlglot": "30.18.0",
+    "ollama": "0.6.2"
+  },
+  "scope": "Selected examples; not the full benchmark.",
+  "results": [
+    {
+      "id": "q18",
+      "tier": 2,
+      "question": "How many orders did customer 18102 place across the whole dataset?",
+      "expected": [
+        {
+          "orders": 145
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many orders did customer 18102 place across the whole dataset?",
+        "tier": 2,
+        "findings": "[call 1] The customer 18102 placed 145 orders across the whole dataset. from_call: call 1, calc: 145, inputs: 145",
+        "claims": [
+          {
+            "text": "The customer 18102 placed 145 orders across the whole dataset.",
+            "value": 145,
+            "unit": "orders",
+            "from_call": 1,
+            "calc": "none",
+            "inputs": [
+              145
+            ]
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "invoice_no",
+          "customer_id",
+          "is_cancellation"
+        ],
+        "filters_used": [
+          "customer_id = 18102 AND NOT is_cancellation"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": null,
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT count(invoice_no) FROM sales WHERE customer_id = 18102 AND quantity > 0",
+            "ok": false,
+            "rows": [],
+            "error": "Completed orders require COUNT(DISTINCT invoice_no) and WHERE NOT is_cancellation. For customer rankings also require customer_id IS NOT NULL. Do not apply product, outlier or quantity exclusions unless the question asks for that population. Keep the requested customer/date filters."
+          },
+          {
+            "n": 1,
+            "tool": "run_sql",
+            "code": "SELECT count(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "ok": true,
+            "rows": [
+              {
+                "count(DISTINCT invoice_no)": 145
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: Identify all rows where customer_id is 18102 and quantity > 0. This will give us all the orders placed by this customer."
+        ],
+        "usage": {
+          "model_calls": 4,
+          "input_tokens": 3436,
+          "output_tokens": 306
+        },
+        "seconds": 7.4
+      },
+      "visible_claims": [
+        {
+          "text": "The customer 18102 placed 145 orders across the whole dataset.",
+          "value": 145,
+          "unit": "orders",
+          "from_call": 1,
+          "calc": "none",
+          "inputs": [
+            145
+          ]
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Identify all rows where customer_id is 18102 and quantity > 0. This will give us all the orders placed by this customer."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 539,
+              "output_tokens": 84
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT count(invoice_no) FROM sales WHERE customer_id = 18102 AND quantity > 0",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1022,
+              "output_tokens": 36
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT count(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1112,
+              "output_tokens": 39
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 1] The customer 18102 placed 145 orders across the whole dataset. from_call: call 1, calc: 145, inputs: 145",
+            "claims": [
+              {
+                "text": "The customer 18102 placed 145 orders across the whole dataset.",
+                "value": 145,
+                "unit": "orders",
+                "from_call": 1,
+                "calc": "none",
+                "inputs": [
+                  145
+                ]
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 763,
+              "output_tokens": 147
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 7.8,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 7.8,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 1,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 2,
+        "queries_ok": 0.5,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0,
+        "model_calls": 4,
+        "input_tokens": 3436,
+        "output_tokens": 306
+      }
+    },
+    {
+      "id": "q18",
+      "tier": 3,
+      "question": "How many orders did customer 18102 place across the whole dataset?",
+      "expected": [
+        {
+          "orders": 145
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many orders did customer 18102 place across the whole dataset?",
+        "tier": 3,
+        "findings": "Customer 18102 placed 145 orders across the whole dataset.",
+        "claims": [
+          {
+            "text": "Customer 18102 placed 145 orders across the whole dataset.",
+            "value": 145,
+            "unit": "orders",
+            "from_call": 1,
+            "calc": "none",
+            "inputs": [],
+            "status": "supported",
+            "evidence": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "problem": null,
+            "row": 0,
+            "column": "count(DISTINCT invoice_no)"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "invoice_no",
+          "customer_id",
+          "is_cancellation"
+        ],
+        "filters_used": [
+          "customer_id = 18102 AND NOT is_cancellation"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": "",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(invoice_no) FROM sales WHERE customer_id = 18102",
+            "ok": false,
+            "rows": [],
+            "error": "Completed orders require COUNT(DISTINCT invoice_no) and WHERE NOT is_cancellation. For customer rankings also require customer_id IS NOT NULL. Do not apply product, outlier or quantity exclusions unless the question asks for that population. Keep the requested customer/date filters."
+          },
+          {
+            "n": 1,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "ok": true,
+            "rows": [
+              {
+                "count(DISTINCT invoice_no)": 145
+              }
+            ],
+            "error": null
+          },
+          {
+            "n": 2,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102",
+            "ok": false,
+            "rows": [],
+            "error": "Completed orders require COUNT(DISTINCT invoice_no) and WHERE NOT is_cancellation. For customer rankings also require customer_id IS NOT NULL. Do not apply product, outlier or quantity exclusions unless the question asks for that population. Keep the requested customer/date filters."
+          },
+          {
+            "n": 3,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "ok": true,
+            "rows": [
+              {
+                "count(DISTINCT invoice_no)": 145
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 1,
+        "plan": [
+          "run_sql: Identify all invoice lines where customer_id is 18102.  This will give us all orders placed by that customer.",
+          "run_sql: Count the number of rows returned from the previous query. This count represents the total number of orders placed by customer 18102."
+        ],
+        "usage": {
+          "model_calls": 10,
+          "input_tokens": 9189,
+          "output_tokens": 698
+        },
+        "seconds": 17.5,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "Customer 18102 placed 145 orders across the whole dataset.",
+          "value": 145,
+          "unit": "orders",
+          "from_call": 1,
+          "calc": "none",
+          "inputs": [],
+          "status": "supported",
+          "evidence": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+          "problem": null,
+          "row": 0,
+          "column": "count(DISTINCT invoice_no)"
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Identify all rows where customer_id is 18102 and quantity > 0. This will give us all the orders placed by this customer."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 539,
+              "output_tokens": 84
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT count(invoice_no) FROM sales WHERE customer_id = 18102 AND quantity > 0",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1022,
+              "output_tokens": 36
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT count(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1112,
+              "output_tokens": 39
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 1] The customer 18102 placed 145 orders across the whole dataset. from_call: call 1, calc: 145, inputs: 145",
+            "claims": [
+              {
+                "text": "The customer 18102 placed 145 orders across the whole dataset.",
+                "value": 145,
+                "unit": "orders",
+                "from_call": 1,
+                "calc": "none",
+                "inputs": [
+                  145
+                ]
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 763,
+              "output_tokens": 147
+            }
+          }
+        },
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Identify all invoice lines where customer_id is 18102.  This will give us all orders placed by that customer."
+              },
+              {
+                "step": 2,
+                "tool": "run_sql",
+                "objective": "Count the number of rows returned from the previous query. This count represents the total number of orders placed by customer 18102."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 569,
+              "output_tokens": 139
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT COUNT(invoice_no) FROM sales WHERE customer_id = 18102",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1018,
+              "output_tokens": 31
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1103,
+              "output_tokens": 39
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1019,
+              "output_tokens": 33
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1106,
+              "output_tokens": 39
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "Customer 18102 placed 145 orders across the whole dataset.",
+            "claims": [
+              {
+                "text": "Customer 18102 placed 145 orders across the whole dataset.",
+                "value": 145,
+                "unit": "orders",
+                "from_call": 1,
+                "calc": "none",
+                "inputs": []
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 938,
+              "output_tokens": 111
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 17.9,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 17.9,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 4,
+        "queries_ok": 0.5,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0,
+        "model_calls": 10,
+        "input_tokens": 9189,
+        "output_tokens": 698
+      }
+    },
+    {
+      "id": "q23",
+      "tier": 2,
+      "question": "Which five customers placed the most orders in 2011?",
+      "expected": [
+        {
+          "customer_id": 14911.0,
+          "orders": 188
+        },
+        {
+          "customer_id": 12748.0,
+          "orders": 175
+        },
+        {
+          "customer_id": 17841.0,
+          "orders": 118
+        },
+        {
+          "customer_id": 13089.0,
+          "orders": 89
+        },
+        {
+          "customer_id": 14606.0,
+          "orders": 85
+        }
+      ],
+      "status": "FAIL",
+      "notes": [
+        "The visible answer does not contain every expected measurement/fact with its correct label."
+      ],
+      "answer": {
+        "question": "Which five customers placed the most orders in 2011?",
+        "tier": 2,
+        "findings": "The query could not be made to run.",
+        "claims": [],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Completed orders require COUNT(DISTINCT invoice_no) and WHERE NOT is_cancellation. For customer rankings also require customer_id IS NOT NULL. Do not apply product, outlier or quantity exclusions unless the question asks for that population. Keep the requested customer/date filters.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "ok": false,
+            "rows": [],
+            "error": "Completed orders require COUNT(DISTINCT invoice_no) and WHERE NOT is_cancellation. For customer rankings also require customer_id IS NOT NULL. Do not apply product, outlier or quantity exclusions unless the question asks for that population. Keep the requested customer/date filters."
+          },
+          {
+            "n": 1,
+            "tool": "run_sql",
+            "code": "SELECT customer_id, COUNT(invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "ok": false,
+            "rows": [],
+            "error": "Completed orders require COUNT(DISTINCT invoice_no) and WHERE NOT is_cancellation. For customer rankings also require customer_id IS NOT NULL. Do not apply product, outlier or quantity exclusions unless the question asks for that population. Keep the requested customer/date filters."
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: Retrieve the customer_id and the number of orders for each customer in 2011.",
+          "run_python: Sort the results from the SQL query by the number of orders in descending order."
+        ],
+        "usage": {
+          "model_calls": 3,
+          "input_tokens": 2681,
+          "output_tokens": 297
+        },
+        "seconds": 6.6
+      },
+      "visible_claims": [],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the customer_id and the number of orders for each customer in 2011."
+              },
+              {
+                "step": 2,
+                "tool": "run_python",
+                "objective": "Sort the results from the SQL query by the number of orders in descending order."
+              }
+            ],
+            "reason": "I need to first extract the customer IDs and order counts from the sales table for 2011. Then, I need to sort this data to identify the customers with the highest order counts.",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 536,
+              "output_tokens": 145
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1007,
+              "output_tokens": 77
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT customer_id, COUNT(invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1138,
+              "output_tokens": 75
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 6.97,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 6.97,
+        "error": null,
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 2,
+        "queries_ok": 0.0,
+        "tool_selection_correct": 0.0,
+        "chart_correct": 0.0,
+        "model_calls": 3,
+        "input_tokens": 2681,
+        "output_tokens": 297
+      }
+    },
+    {
+      "id": "q23",
+      "tier": 3,
+      "question": "Which five customers placed the most orders in 2011?",
+      "expected": [
+        {
+          "customer_id": 14911.0,
+          "orders": 188
+        },
+        {
+          "customer_id": 12748.0,
+          "orders": 175
+        },
+        {
+          "customer_id": 17841.0,
+          "orders": 118
+        },
+        {
+          "customer_id": 13089.0,
+          "orders": 89
+        },
+        {
+          "customer_id": 14606.0,
+          "orders": 85
+        }
+      ],
+      "status": "FAIL",
+      "notes": [
+        "The visible answer does not contain every expected measurement/fact with its correct label."
+      ],
+      "answer": {
+        "question": "Which five customers placed the most orders in 2011?",
+        "tier": 3,
+        "findings": "The query could not be made to run.",
+        "claims": [],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Completed orders require COUNT(DISTINCT invoice_no) and WHERE NOT is_cancellation. For customer rankings also require customer_id IS NOT NULL. Do not apply product, outlier or quantity exclusions unless the question asks for that population. Keep the requested customer/date filters.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "ok": false,
+            "rows": [],
+            "error": "Completed orders require COUNT(DISTINCT invoice_no) and WHERE NOT is_cancellation. For customer rankings also require customer_id IS NOT NULL. Do not apply product, outlier or quantity exclusions unless the question asks for that population. Keep the requested customer/date filters."
+          },
+          {
+            "n": 1,
+            "tool": "run_sql",
+            "code": "SELECT customer_id, COUNT(invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "ok": false,
+            "rows": [],
+            "error": "Completed orders require COUNT(DISTINCT invoice_no) and WHERE NOT is_cancellation. For customer rankings also require customer_id IS NOT NULL. Do not apply product, outlier or quantity exclusions unless the question asks for that population. Keep the requested customer/date filters."
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: Retrieve the customer_id and the number of orders for each customer in 2011.",
+          "run_python: Sort the results from the SQL query by the number of orders in descending order."
+        ],
+        "usage": {
+          "model_calls": 3,
+          "input_tokens": 2681,
+          "output_tokens": 297
+        },
+        "seconds": 6.7,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the customer_id and the number of orders for each customer in 2011."
+              },
+              {
+                "step": 2,
+                "tool": "run_python",
+                "objective": "Sort the results from the SQL query by the number of orders in descending order."
+              }
+            ],
+            "reason": "I need to first extract the customer IDs and order counts from the sales table for 2011. Then, I need to sort this data to identify the customers with the highest order counts.",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 536,
+              "output_tokens": 145
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1007,
+              "output_tokens": 77
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT customer_id, COUNT(invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1138,
+              "output_tokens": 75
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 7.07,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 7.07,
+        "error": null,
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 2,
+        "queries_ok": 0.0,
+        "tool_selection_correct": 0.0,
+        "chart_correct": 0.0,
+        "model_calls": 3,
+        "input_tokens": 2681,
+        "output_tokens": 297
+      }
+    }
+  ]
+}

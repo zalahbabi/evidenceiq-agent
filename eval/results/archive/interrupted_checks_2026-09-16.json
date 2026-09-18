@@ -1,0 +1,2741 @@
+{
+  "started_at": "2026-09-16T06:59:47.768183+00:00",
+  "model": "gemma3:4b",
+  "timeout_seconds": 120,
+  "packages": {
+    "duckdb": "1.5.5",
+    "pandas": "3.0.5",
+    "streamlit": "1.64.0",
+    "sqlglot": "30.18.0",
+    "ollama": "0.6.2"
+  },
+  "scope": "Full benchmark; human review pending.",
+  "results": [
+    {
+      "id": "q01",
+      "tier": 1,
+      "question": "What was our total revenue in 2011?",
+      "expected": [
+        {
+          "revenue": 9809614.01
+        }
+      ],
+      "status": "OBSERVED",
+      "notes": [
+        "Baseline output recorded; no numerical accuracy claim."
+      ],
+      "answer": {
+        "question": "What was our total revenue in 2011?",
+        "tier": 1,
+        "findings": "To determine the total revenue in 2011, I need to sum the sales data for December 2009, December 2010, and December 2011. Unfortunately, the provided data does not include the specific sales figures for each of these months. Therefore, I cannot calculate the total revenue for 2011.",
+        "claims": [],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "plan": [],
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": true,
+        "limitations": null,
+        "log": [],
+        "retries": 0,
+        "seconds": 7.7
+      },
+      "visible_claims": [],
+      "model_calls": [
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "To determine the total revenue in 2011, I need to sum the sales data for December 2009, December 2010, and December 2011. Unfortunately, the provided data does not include the specific sales figures for each of these months. Therefore, I cannot calculate the total revenue for 2011.",
+            "claims": [],
+            "insufficient_data": true
+          }
+        }
+      ],
+      "elapsed_seconds": 8.2,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": true,
+        "route": "model_tools",
+        "seconds": 8.2,
+        "error": null,
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 0.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q01",
+      "tier": 2,
+      "question": "What was our total revenue in 2011?",
+      "expected": [
+        {
+          "revenue": 9809614.01
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "What was our total revenue in 2011?",
+        "tier": 2,
+        "findings": "Revenue was \u00a39,809,614.01. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "Revenue was \u00a39,809,614.01.",
+            "value": 9809614.01,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "revenue",
+            "kind": "number"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+            "ok": true,
+            "rows": [
+              {
+                "revenue": 9809614.01
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.02,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern"
+      },
+      "visible_claims": [
+        {
+          "text": "Revenue was \u00a39,809,614.01.",
+          "value": 9809614.01,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "revenue",
+          "kind": "number"
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.51,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.51,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q01",
+      "tier": 3,
+      "question": "What was our total revenue in 2011?",
+      "expected": [
+        {
+          "revenue": 9809614.01
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "What was our total revenue in 2011?",
+        "tier": 3,
+        "findings": "Revenue was \u00a39,809,614.01. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "Revenue was \u00a39,809,614.01.",
+            "value": 9809614.01,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+            "ok": true,
+            "rows": [
+              {
+                "revenue": 9809614.01
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.0,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "Revenue was \u00a39,809,614.01.",
+          "value": 9809614.01,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+          "problem": null
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.5,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.5,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q02",
+      "tier": 1,
+      "question": "How many orders did we take in 2011?",
+      "expected": [
+        {
+          "orders": 20362
+        }
+      ],
+      "status": "OBSERVED",
+      "notes": [
+        "Baseline output recorded; no numerical accuracy claim."
+      ],
+      "answer": {
+        "question": "How many orders did we take in 2011?",
+        "tier": 1,
+        "findings": "To determine the total number of orders taken in 2011, I need to analyze the order data for that specific year. Unfortunately, I don't have access to the raw order data itself. However, I can provide an estimated answer based on the available information. \n\nI can summarize the order data from December 2009 to December 2011 as follows:\n\n*   **December 2009:** 125 orders\n*   **December 2010:** 180 orders\n*   **December 2011:** 210 orders\n\n**Total Orders in 2011:** 125 + 180 + 210 = 515 orders\n\n**Therefore, based on this limited data, we took approximately 515 orders in 2011.**",
+        "claims": [
+          {
+            "text": "We took approximately 515 orders in 2011.",
+            "value": 515,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "sum",
+            "inputs": [
+              125,
+              180,
+              210
+            ]
+          }
+        ],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "plan": [],
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": null,
+        "log": [],
+        "retries": 0,
+        "seconds": 10.2
+      },
+      "visible_claims": [
+        {
+          "text": "We took approximately 515 orders in 2011.",
+          "value": 515,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "sum",
+          "inputs": [
+            125,
+            180,
+            210
+          ]
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "To determine the total number of orders taken in 2011, I need to analyze the order data for that specific year. Unfortunately, I don't have access to the raw order data itself. However, I can provide an estimated answer based on the available information. \n\nI can summarize the order data from December 2009 to December 2011 as follows:\n\n*   **December 2009:** 125 orders\n*   **December 2010:** 180 orders\n*   **December 2011:** 210 orders\n\n**Total Orders in 2011:** 125 + 180 + 210 = 515 orders\n\n**Therefore, based on this limited data, we took approximately 515 orders in 2011.**",
+            "claims": [
+              {
+                "text": "We took approximately 515 orders in 2011.",
+                "value": 515,
+                "unit": "orders",
+                "from_call": 0,
+                "calc": "sum",
+                "inputs": [
+                  125,
+                  180,
+                  210
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "elapsed_seconds": 10.68,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 10.68,
+        "error": null,
+        "claims": 1,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 1,
+        "undeclared": 6,
+        "evidence_coverage": 0.0,
+        "unsupported_rate": 1.0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 0.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q02",
+      "tier": 2,
+      "question": "How many orders did we take in 2011?",
+      "expected": [
+        {
+          "orders": 20362
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many orders did we take in 2011?",
+        "tier": 2,
+        "findings": "There were 20,362 orders. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "There were 20,362 orders.",
+            "value": 20362,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "orders",
+            "kind": "number"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "invoice_no",
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(DISTINCT invoice_no) AS orders FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+            "ok": true,
+            "rows": [
+              {
+                "orders": 20362
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.02,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern"
+      },
+      "visible_claims": [
+        {
+          "text": "There were 20,362 orders.",
+          "value": 20362,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "orders",
+          "kind": "number"
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.49,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.49,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q02",
+      "tier": 3,
+      "question": "How many orders did we take in 2011?",
+      "expected": [
+        {
+          "orders": 20362
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many orders did we take in 2011?",
+        "tier": 3,
+        "findings": "There were 20,362 orders. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "There were 20,362 orders.",
+            "value": 20362,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "orders",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT COUNT(DISTINCT invoice_no) AS orders FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "invoice_no",
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(DISTINCT invoice_no) AS orders FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+            "ok": true,
+            "rows": [
+              {
+                "orders": 20362
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.0,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "There were 20,362 orders.",
+          "value": 20362,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "orders",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT COUNT(DISTINCT invoice_no) AS orders FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+          "problem": null
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.5,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.5,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q03",
+      "tier": 1,
+      "question": "How many units did we sell in 2011?",
+      "expected": [
+        {
+          "units": 5283923
+        }
+      ],
+      "status": "OBSERVED",
+      "notes": [
+        "Baseline output recorded; no numerical accuracy claim."
+      ],
+      "answer": {
+        "question": "How many units did we sell in 2011?",
+        "tier": 1,
+        "findings": "To determine the total units sold in 2011, I need to sum the units sold across all months of that year. Unfortunately, I only have the monthly sales data from December 2009 to December 2011. I do not have the ability to perform calculations or sum the data. Therefore, I cannot provide a definitive answer to your question.",
+        "claims": [],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "plan": [],
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": true,
+        "limitations": null,
+        "log": [],
+        "retries": 0,
+        "seconds": 2.9
+      },
+      "visible_claims": [],
+      "model_calls": [
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "To determine the total units sold in 2011, I need to sum the units sold across all months of that year. Unfortunately, I only have the monthly sales data from December 2009 to December 2011. I do not have the ability to perform calculations or sum the data. Therefore, I cannot provide a definitive answer to your question.",
+            "claims": [],
+            "insufficient_data": true
+          }
+        }
+      ],
+      "elapsed_seconds": 3.34,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": true,
+        "route": "model_tools",
+        "seconds": 3.34,
+        "error": null,
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 0.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q03",
+      "tier": 2,
+      "question": "How many units did we sell in 2011?",
+      "expected": [
+        {
+          "units": 5283923
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many units did we sell in 2011?",
+        "tier": 2,
+        "findings": "There were 5,283,923 units. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "There were 5,283,923 units.",
+            "value": 5283923,
+            "unit": "units",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "units",
+            "kind": "number"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "quantity",
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011 AND quantity > 0"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT SUM(quantity) AS units FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND quantity > 0",
+            "ok": true,
+            "rows": [
+              {
+                "units": 5283923
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.02,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern"
+      },
+      "visible_claims": [
+        {
+          "text": "There were 5,283,923 units.",
+          "value": 5283923,
+          "unit": "units",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "units",
+          "kind": "number"
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.49,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.49,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q03",
+      "tier": 3,
+      "question": "How many units did we sell in 2011?",
+      "expected": [
+        {
+          "units": 5283923
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many units did we sell in 2011?",
+        "tier": 3,
+        "findings": "There were 5,283,923 units. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "There were 5,283,923 units.",
+            "value": 5283923,
+            "unit": "units",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "units",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT SUM(quantity) AS units FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND quantity > 0",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "quantity",
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011 AND quantity > 0"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT SUM(quantity) AS units FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND quantity > 0",
+            "ok": true,
+            "rows": [
+              {
+                "units": 5283923
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.0,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "There were 5,283,923 units.",
+          "value": 5283923,
+          "unit": "units",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "units",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT SUM(quantity) AS units FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND quantity > 0",
+          "problem": null
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.5,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.5,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q04",
+      "tier": 1,
+      "question": "How many customers bought from us in 2011?",
+      "expected": [
+        {
+          "customers": 4220
+        }
+      ],
+      "status": "OBSERVED",
+      "notes": [
+        "Baseline output recorded; no numerical accuracy claim."
+      ],
+      "answer": {
+        "question": "How many customers bought from us in 2011?",
+        "tier": 1,
+        "findings": "To determine the number of customers who bought from us in 2011, I need to analyze the order data for that year. Unfortunately, I only have order information \u2013 the number of orders placed. I do not have a customer master file that directly links orders to individual customers. Therefore, I can only estimate the number of unique customers based on the number of distinct order IDs within 2011. \n\nHere\u2019s the breakdown:\n\n*   **Total Orders in 2011:** Based on the available data, there were 1,875 orders placed in 2011.\n*   **Unique Order IDs in 2011:**  Analyzing the order data, I identified 885 unique order IDs.\n\n**Therefore, my estimate is that 885 customers purchased from us in 2011.**\n\n**Caveats:** This is an estimate. It assumes that each unique order ID represents a distinct customer. There's a possibility of multiple orders being placed by the same customer, which would underestimate the true number of unique customers.  Without a customer database, this is the best estimate I can provide.",
+        "claims": [
+          {
+            "text": "There were 1,875 orders placed in 2011.",
+            "value": 1875.0,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "sum",
+            "inputs": [
+              1875
+            ]
+          },
+          {
+            "text": "There were 885 unique order IDs in 2011.",
+            "value": 885.0,
+            "unit": "order IDs",
+            "from_call": 0,
+            "calc": "sum",
+            "inputs": [
+              885
+            ]
+          },
+          {
+            "text": "The estimated number of customers in 2011 is 885.",
+            "value": 885.0,
+            "unit": "customers",
+            "from_call": 0,
+            "calc": "sum",
+            "inputs": [
+              885
+            ]
+          }
+        ],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "plan": [],
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": null,
+        "log": [],
+        "retries": 0,
+        "seconds": 14.5
+      },
+      "visible_claims": [
+        {
+          "text": "There were 1,875 orders placed in 2011.",
+          "value": 1875.0,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "sum",
+          "inputs": [
+            1875
+          ]
+        },
+        {
+          "text": "There were 885 unique order IDs in 2011.",
+          "value": 885.0,
+          "unit": "order IDs",
+          "from_call": 0,
+          "calc": "sum",
+          "inputs": [
+            885
+          ]
+        },
+        {
+          "text": "The estimated number of customers in 2011 is 885.",
+          "value": 885.0,
+          "unit": "customers",
+          "from_call": 0,
+          "calc": "sum",
+          "inputs": [
+            885
+          ]
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "To determine the number of customers who bought from us in 2011, I need to analyze the order data for that year. Unfortunately, I only have order information \u2013 the number of orders placed. I do not have a customer master file that directly links orders to individual customers. Therefore, I can only estimate the number of unique customers based on the number of distinct order IDs within 2011. \n\nHere\u2019s the breakdown:\n\n*   **Total Orders in 2011:** Based on the available data, there were 1,875 orders placed in 2011.\n*   **Unique Order IDs in 2011:**  Analyzing the order data, I identified 885 unique order IDs.\n\n**Therefore, my estimate is that 885 customers purchased from us in 2011.**\n\n**Caveats:** This is an estimate. It assumes that each unique order ID represents a distinct customer. There's a possibility of multiple orders being placed by the same customer, which would underestimate the true number of unique customers.  Without a customer database, this is the best estimate I can provide.",
+            "claims": [
+              {
+                "text": "There were 1,875 orders placed in 2011.",
+                "value": 1875.0,
+                "unit": "orders",
+                "from_call": 0,
+                "calc": "sum",
+                "inputs": [
+                  1875
+                ]
+              },
+              {
+                "text": "There were 885 unique order IDs in 2011.",
+                "value": 885.0,
+                "unit": "order IDs",
+                "from_call": 0,
+                "calc": "sum",
+                "inputs": [
+                  885
+                ]
+              },
+              {
+                "text": "The estimated number of customers in 2011 is 885.",
+                "value": 885.0,
+                "unit": "customers",
+                "from_call": 0,
+                "calc": "sum",
+                "inputs": [
+                  885
+                ]
+              }
+            ],
+            "insufficient_data": false
+          }
+        }
+      ],
+      "elapsed_seconds": 14.93,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 14.93,
+        "error": null,
+        "claims": 3,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 3,
+        "undeclared": 0,
+        "evidence_coverage": 0.0,
+        "unsupported_rate": 1.0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 0.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q04",
+      "tier": 2,
+      "question": "How many customers bought from us in 2011?",
+      "expected": [
+        {
+          "customers": 4220
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many customers bought from us in 2011?",
+        "tier": 2,
+        "findings": "There were 4,220 identified customers. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "There were 4,220 identified customers.",
+            "value": 4220,
+            "unit": "customers",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "customers",
+            "kind": "number"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "customer_id",
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011 AND NOT customer_id IS NULL"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded. Transactions without a customer ID are excluded from this customer count.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(DISTINCT customer_id) AS customers FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND customer_id IS NOT NULL",
+            "ok": true,
+            "rows": [
+              {
+                "customers": 4220
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.03,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern"
+      },
+      "visible_claims": [
+        {
+          "text": "There were 4,220 identified customers.",
+          "value": 4220,
+          "unit": "customers",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "customers",
+          "kind": "number"
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.51,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.51,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q04",
+      "tier": 3,
+      "question": "How many customers bought from us in 2011?",
+      "expected": [
+        {
+          "customers": 4220
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many customers bought from us in 2011?",
+        "tier": 3,
+        "findings": "There were 4,220 identified customers. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "There were 4,220 identified customers.",
+            "value": 4220,
+            "unit": "customers",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "customers",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT COUNT(DISTINCT customer_id) AS customers FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND customer_id IS NOT NULL",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "customer_id",
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011 AND NOT customer_id IS NULL"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded. Transactions without a customer ID are excluded from this customer count.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(DISTINCT customer_id) AS customers FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND customer_id IS NOT NULL",
+            "ok": true,
+            "rows": [
+              {
+                "customers": 4220
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.0,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "There were 4,220 identified customers.",
+          "value": 4220,
+          "unit": "customers",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "customers",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT COUNT(DISTINCT customer_id) AS customers FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND customer_id IS NOT NULL",
+          "problem": null
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.49,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.49,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q05",
+      "tier": 1,
+      "question": "What was our average order value in 2011?",
+      "expected": [
+        {
+          "aov": 481.76
+        }
+      ],
+      "status": "OBSERVED",
+      "notes": [
+        "Baseline output recorded; no numerical accuracy claim."
+      ],
+      "answer": {
+        "question": "What was our average order value in 2011?",
+        "tier": 1,
+        "findings": "To determine the average order value in 2011, I need to analyze the order data for that year. Unfortunately, I only have the order volume data from December 2009 to December 2011. I do not have the total revenue generated during this period. Therefore, I cannot calculate the average order value.",
+        "claims": [],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "plan": [],
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": true,
+        "limitations": null,
+        "log": [],
+        "retries": 0,
+        "seconds": 2.5
+      },
+      "visible_claims": [],
+      "model_calls": [
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "To determine the average order value in 2011, I need to analyze the order data for that year. Unfortunately, I only have the order volume data from December 2009 to December 2011. I do not have the total revenue generated during this period. Therefore, I cannot calculate the average order value.",
+            "claims": [],
+            "insufficient_data": true
+          }
+        }
+      ],
+      "elapsed_seconds": 2.9,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": true,
+        "route": "model_tools",
+        "seconds": 2.9,
+        "error": null,
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 0.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q05",
+      "tier": 2,
+      "question": "What was our average order value in 2011?",
+      "expected": [
+        {
+          "aov": 481.76
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "What was our average order value in 2011?",
+        "tier": 2,
+        "findings": "Average order value was \u00a3481.76. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "Average order value was \u00a3481.76.",
+            "value": 481.76,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "aov",
+            "kind": "number"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "is_cancellation",
+          "revenue",
+          "invoice_date",
+          "invoice_no"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT ROUND(SUM(revenue)/NULLIF(COUNT(DISTINCT invoice_no),0),2) AS aov FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+            "ok": true,
+            "rows": [
+              {
+                "aov": 481.76
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.03,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern"
+      },
+      "visible_claims": [
+        {
+          "text": "Average order value was \u00a3481.76.",
+          "value": 481.76,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "aov",
+          "kind": "number"
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.51,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.51,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q05",
+      "tier": 3,
+      "question": "What was our average order value in 2011?",
+      "expected": [
+        {
+          "aov": 481.76
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "What was our average order value in 2011?",
+        "tier": 3,
+        "findings": "Average order value was \u00a3481.76. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "Average order value was \u00a3481.76.",
+            "value": 481.76,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "aov",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT ROUND(SUM(revenue)/NULLIF(COUNT(DISTINCT invoice_no),0),2) AS aov FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "is_cancellation",
+          "revenue",
+          "invoice_date",
+          "invoice_no"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellations are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT ROUND(SUM(revenue)/NULLIF(COUNT(DISTINCT invoice_no),0),2) AS aov FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+            "ok": true,
+            "rows": [
+              {
+                "aov": 481.76
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.0,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "Average order value was \u00a3481.76.",
+          "value": 481.76,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "aov",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT ROUND(SUM(revenue)/NULLIF(COUNT(DISTINCT invoice_no),0),2) AS aov FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+          "problem": null
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.49,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.49,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q06",
+      "tier": 1,
+      "question": "Which country outside the UK generated the most revenue in 2011, and how much was it?",
+      "expected": [
+        {
+          "country": "Netherlands",
+          "revenue": 276661.86
+        }
+      ],
+      "status": "OBSERVED",
+      "notes": [
+        "Baseline output recorded; no numerical accuracy claim."
+      ],
+      "answer": {
+        "question": "Which country outside the UK generated the most revenue in 2011, and how much was it?",
+        "tier": 1,
+        "findings": "Based solely on the provided data (December 2009 to December 2011), it is impossible to determine which country outside the UK generated the most revenue in 2011, nor to quantify that revenue. The data only contains order volume, not the originating country of those orders.  Therefore, I cannot answer the question.",
+        "claims": [],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "plan": [],
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": true,
+        "limitations": null,
+        "log": [],
+        "retries": 0,
+        "seconds": 2.8
+      },
+      "visible_claims": [],
+      "model_calls": [
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "Based solely on the provided data (December 2009 to December 2011), it is impossible to determine which country outside the UK generated the most revenue in 2011, nor to quantify that revenue. The data only contains order volume, not the originating country of those orders.  Therefore, I cannot answer the question.",
+            "claims": [],
+            "insufficient_data": true
+          }
+        }
+      ],
+      "elapsed_seconds": 3.28,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": true,
+        "route": "model_tools",
+        "seconds": 3.28,
+        "error": null,
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 0.0,
+        "chart_correct": 0.0
+      }
+    },
+    {
+      "id": "q06",
+      "tier": 2,
+      "question": "Which country outside the UK generated the most revenue in 2011, and how much was it?",
+      "expected": [
+        {
+          "country": "Netherlands",
+          "revenue": 276661.86
+        }
+      ],
+      "status": "FAIL",
+      "notes": [
+        "The visible answer does not contain every expected measurement/fact with its correct label."
+      ],
+      "answer": {
+        "question": "Which country outside the UK generated the most revenue in 2011, and how much was it?",
+        "tier": 2,
+        "findings": "The United Kingdom generated the most revenue in 2011, with a revenue of 8244599.81.",
+        "claims": [
+          {
+            "text": "The United Kingdom generated the most revenue in 2011, with a revenue of 8244599.81",
+            "value": true,
+            "unit": "United Kingdom",
+            "from_call": 1,
+            "calc": "none",
+            "inputs": [
+              8244599.81
+            ]
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "country",
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": null,
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT country, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY country HAVING country != 'UK' ORDER BY revenue DESC LIMIT 1",
+            "ok": false,
+            "rows": [],
+            "error": "Overall revenue must not use product-only or outlier exclusions."
+          },
+          {
+            "n": 1,
+            "tool": "run_sql",
+            "code": "SELECT country, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 GROUP BY country HAVING country != 'UK' ORDER BY revenue DESC LIMIT 1",
+            "ok": true,
+            "rows": [
+              {
+                "country": "United Kingdom",
+                "revenue": 8244599.81
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: Retrieve revenue data for 2011, excluding cancellations, and filtering by countries excluding the UK."
+        ],
+        "seconds": 17.2
+      },
+      "visible_claims": [
+        {
+          "text": "The United Kingdom generated the most revenue in 2011, with a revenue of 8244599.81",
+          "value": true,
+          "unit": "United Kingdom",
+          "from_call": 1,
+          "calc": "none",
+          "inputs": [
+            8244599.81
+          ]
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve revenue data for 2011, excluding cancellations, and filtering by countries excluding the UK."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT country, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY country HAVING country != 'UK' ORDER BY revenue DESC LIMIT 1"
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT country, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 GROUP BY country HAVING country != 'UK' ORDER BY revenue DESC LIMIT 1"
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "The United Kingdom generated the most revenue in 2011, with a revenue of 8244599.81.",
+            "claims": [
+              {
+                "text": "The United Kingdom generated the most revenue in 2011, with a revenue of 8244599.81",
+                "value": true,
+                "unit": "United Kingdom",
+                "from_call": 1,
+                "calc": "none",
+                "inputs": [
+                  8244599.81
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "elapsed_seconds": 17.66,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 17.66,
+        "error": null,
+        "claims": 1,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 1,
+        "undeclared": 2,
+        "evidence_coverage": 0.0,
+        "unsupported_rate": 1.0,
+        "queries": 2,
+        "queries_ok": 0.5,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 0.0
+      }
+    },
+    {
+      "id": "q06",
+      "tier": 3,
+      "question": "Which country outside the UK generated the most revenue in 2011, and how much was it?",
+      "expected": [
+        {
+          "country": "Netherlands",
+          "revenue": 276661.86
+        }
+      ],
+      "status": "FAIL",
+      "notes": [
+        "The visible answer does not contain every expected measurement/fact with its correct label."
+      ],
+      "answer": {
+        "question": "Which country outside the UK generated the most revenue in 2011, and how much was it?",
+        "tier": 3,
+        "findings": "The query could not be made to run.",
+        "claims": [],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Binder Error: Referenced table \"dim_customer\" not found!\nCandidate tables: \"c\"\n\nLINE [unverified]: GROUP BY dim_customer.country\n                 ^ Some figures could not be verified and were withheld.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT dim_customer.country, ROUND(SUM(s.revenue), 2) AS revenue\nFROM sales s\nJOIN dim_customer c ON s.customer_id = c.customer_id\nWHERE NOT s.is_cancellation AND s.invoice_month BETWEEN '2010-01-01' AND '2011-12-31' AND c.country <> 'UK'\nGROUP BY dim_customer.country\nORDER BY revenue DESC\nLIMIT 1;",
+            "ok": false,
+            "rows": [],
+            "error": "Binder Error: Referenced table \"dim_customer\" not found!\nCandidate tables: \"c\"\n\nLINE 5: GROUP BY dim_customer.country\n                 ^"
+          },
+          {
+            "n": 1,
+            "tool": "run_sql",
+            "code": "SELECT dim_customer.country, ROUND(SUM(s.revenue), 2) AS revenue\nFROM sales s\nJOIN dim_customer c ON s.customer_id = c.customer_id\nWHERE NOT s.is_cancellation AND s.invoice_month BETWEEN '2010-01-01' AND '2011-12-31' AND c.country <> 'UK'\nGROUP BY dim_customer.country\nORDER BY revenue DESC\nLIMIT 1;",
+            "ok": false,
+            "rows": [],
+            "error": "Binder Error: Referenced table \"dim_customer\" not found!\nCandidate tables: \"c\"\n\nLINE 5: GROUP BY dim_customer.country\n                 ^"
+          }
+        ],
+        "retries": 2,
+        "plan": [
+          "run_sql: Identify countries with revenue in 2011, excluding the UK."
+        ],
+        "seconds": 44.7,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": [
+          5.0
+        ]
+      },
+      "visible_claims": [],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve revenue data for 2011, excluding cancellations, and filtering by countries excluding the UK."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT country, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY country HAVING country != 'UK' ORDER BY revenue DESC LIMIT 1"
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT country, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 GROUP BY country HAVING country != 'UK' ORDER BY revenue DESC LIMIT 1"
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "The United Kingdom generated the most revenue in 2011, with a revenue of 8244599.81.",
+            "claims": [
+              {
+                "text": "The United Kingdom generated the most revenue in 2011, with a revenue of 8244599.81",
+                "value": true,
+                "unit": "United Kingdom",
+                "from_call": 1,
+                "calc": "none",
+                "inputs": [
+                  8244599.81
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Identify countries with revenue in 2011, excluding the UK."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT dim_customer.country, ROUND(SUM(s.revenue), 2) AS revenue\nFROM sales s\nJOIN dim_customer c ON s.customer_id = c.customer_id\nWHERE NOT s.is_cancellation AND s.invoice_month BETWEEN '2010-01-01' AND '2011-12-31' AND c.country <> 'UK'\nGROUP BY dim_customer.country\nORDER BY revenue DESC\nLIMIT 1;"
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT dim_customer.country, ROUND(SUM(s.revenue), 2) AS revenue\nFROM sales s\nJOIN dim_customer c ON s.customer_id = c.customer_id\nWHERE NOT s.is_cancellation AND s.invoice_month BETWEEN '2010-01-01' AND '2011-12-31' AND c.country <> 'UK'\nGROUP BY dim_customer.country\nORDER BY revenue DESC\nLIMIT 1;"
+          }
+        },
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve revenue data for 2011, excluding cancellations, and grouping by country."
+              }
+            ]
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT country, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY country ORDER BY revenue DESC;"
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT country, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 GROUP BY country ORDER BY revenue DESC;"
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "The Netherlands generated the most revenue outside the UK in 2011, with revenue of 276661.86.",
+            "claims": [
+              {
+                "text": "The Netherlands generated the most revenue outside the UK in 2011, with revenue of 276661.86.",
+                "value": true,
+                "unit": "Netherlands",
+                "from_call": 1,
+                "calc": "sum",
+                "inputs": [
+                  276661.86
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "elapsed_seconds": 45.23,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 45.23,
+        "error": null,
+        "claims": 0,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 0,
+        "unsupported_rate": 0,
+        "queries": 2,
+        "queries_ok": 0.0,
+        "tool_selection_correct": 0.0,
+        "chart_correct": 0.0
+      }
+    },
+    {
+      "id": "q07",
+      "tier": 1,
+      "question": "List the five products that generated the most revenue in 2011, with the revenue for each.",
+      "expected": [
+        {
+          "stock_code": "22423",
+          "description": "REGENCY CAKESTAND 3 TIER",
+          "revenue": 146461.78
+        },
+        {
+          "stock_code": "47566",
+          "description": "PARTY BUNTING",
+          "revenue": 98237.49
+        },
+        {
+          "stock_code": "85123A",
+          "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+          "revenue": 94027.39
+        },
+        {
+          "stock_code": "85099B",
+          "description": "JUMBO BAG RED RETROSPOT",
+          "revenue": 90140.66
+        },
+        {
+          "stock_code": "23084",
+          "description": "RABBIT NIGHT LIGHT",
+          "revenue": 66870.03
+        }
+      ],
+      "status": "OBSERVED",
+      "notes": [
+        "Baseline output recorded; no numerical accuracy claim."
+      ],
+      "answer": {
+        "question": "List the five products that generated the most revenue in 2011, with the revenue for each.",
+        "tier": 1,
+        "findings": "Based on the available data for December 2009 to December 2011, here are the five products that generated the most revenue in 2011:\n\n1.  **Chocolate Boxes:** \u00a345,289\n2.  **Greeting Cards (General):** \u00a338,912\n3.  **Christmas Crackers:** \u00a332,157\n4.  **Novelty Gifts:** \u00a328,763\n5.  **Socks (Multi-Pack):** \u00a325,410\n\n**Note:** This analysis is solely based on revenue generated during the specified period and does not include any cost, profit, marketing, or demographic information.",
+        "claims": [
+          {
+            "text": "Chocolate Boxes generated the highest revenue in 2011 at \u00a345,289.",
+            "value": 45289.0,
+            "unit": "GBP",
+            "from_call": 1,
+            "calc": "sum",
+            "inputs": [
+              45289,
+              38912,
+              32157,
+              28763,
+              25410
+            ]
+          },
+          {
+            "text": "Greeting Cards (General) generated \u00a338,912 in revenue during 2011.",
+            "value": 38912.0,
+            "unit": "GBP",
+            "from_call": 1,
+            "calc": "sum",
+            "inputs": [
+              45289,
+              38912,
+              32157,
+              28763,
+              25410
+            ]
+          },
+          {
+            "text": "Christmas Crackers generated \u00a332,157 in revenue during 2011.",
+            "value": 32157.0,
+            "unit": "GBP",
+            "from_call": 1,
+            "calc": "sum",
+            "inputs": [
+              45289,
+              38912,
+              32157,
+              28763,
+              25410
+            ]
+          },
+          {
+            "text": "Novelty Gifts generated \u00a328,763 in revenue during 2011.",
+            "value": 28763.0,
+            "unit": "GBP",
+            "from_call": 1,
+            "calc": "sum",
+            "inputs": [
+              45289,
+              38912,
+              32157,
+              28763,
+              25410
+            ]
+          },
+          {
+            "text": "Socks (Multi-Pack) generated \u00a325,410 in revenue during 2011.",
+            "value": 25410.0,
+            "unit": "GBP",
+            "from_call": 1,
+            "calc": "sum",
+            "inputs": [
+              45289,
+              38912,
+              32157,
+              28763,
+              25410
+            ]
+          }
+        ],
+        "kpis": {},
+        "fields_used": [],
+        "filters_used": [],
+        "chart": null,
+        "plan": [],
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": null,
+        "log": [],
+        "retries": 0,
+        "seconds": 21.1
+      },
+      "visible_claims": [
+        {
+          "text": "Chocolate Boxes generated the highest revenue in 2011 at \u00a345,289.",
+          "value": 45289.0,
+          "unit": "GBP",
+          "from_call": 1,
+          "calc": "sum",
+          "inputs": [
+            45289,
+            38912,
+            32157,
+            28763,
+            25410
+          ]
+        },
+        {
+          "text": "Greeting Cards (General) generated \u00a338,912 in revenue during 2011.",
+          "value": 38912.0,
+          "unit": "GBP",
+          "from_call": 1,
+          "calc": "sum",
+          "inputs": [
+            45289,
+            38912,
+            32157,
+            28763,
+            25410
+          ]
+        },
+        {
+          "text": "Christmas Crackers generated \u00a332,157 in revenue during 2011.",
+          "value": 32157.0,
+          "unit": "GBP",
+          "from_call": 1,
+          "calc": "sum",
+          "inputs": [
+            45289,
+            38912,
+            32157,
+            28763,
+            25410
+          ]
+        },
+        {
+          "text": "Novelty Gifts generated \u00a328,763 in revenue during 2011.",
+          "value": 28763.0,
+          "unit": "GBP",
+          "from_call": 1,
+          "calc": "sum",
+          "inputs": [
+            45289,
+            38912,
+            32157,
+            28763,
+            25410
+          ]
+        },
+        {
+          "text": "Socks (Multi-Pack) generated \u00a325,410 in revenue during 2011.",
+          "value": 25410.0,
+          "unit": "GBP",
+          "from_call": 1,
+          "calc": "sum",
+          "inputs": [
+            45289,
+            38912,
+            32157,
+            28763,
+            25410
+          ]
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "Based on the available data for December 2009 to December 2011, here are the five products that generated the most revenue in 2011:\n\n1.  **Chocolate Boxes:** \u00a345,289\n2.  **Greeting Cards (General):** \u00a338,912\n3.  **Christmas Crackers:** \u00a332,157\n4.  **Novelty Gifts:** \u00a328,763\n5.  **Socks (Multi-Pack):** \u00a325,410\n\n**Note:** This analysis is solely based on revenue generated during the specified period and does not include any cost, profit, marketing, or demographic information.",
+            "claims": [
+              {
+                "text": "Chocolate Boxes generated the highest revenue in 2011 at \u00a345,289.",
+                "value": 45289.0,
+                "unit": "GBP",
+                "from_call": 1,
+                "calc": "sum",
+                "inputs": [
+                  45289,
+                  38912,
+                  32157,
+                  28763,
+                  25410
+                ]
+              },
+              {
+                "text": "Greeting Cards (General) generated \u00a338,912 in revenue during 2011.",
+                "value": 38912.0,
+                "unit": "GBP",
+                "from_call": 1,
+                "calc": "sum",
+                "inputs": [
+                  45289,
+                  38912,
+                  32157,
+                  28763,
+                  25410
+                ]
+              },
+              {
+                "text": "Christmas Crackers generated \u00a332,157 in revenue during 2011.",
+                "value": 32157.0,
+                "unit": "GBP",
+                "from_call": 1,
+                "calc": "sum",
+                "inputs": [
+                  45289,
+                  38912,
+                  32157,
+                  28763,
+                  25410
+                ]
+              },
+              {
+                "text": "Novelty Gifts generated \u00a328,763 in revenue during 2011.",
+                "value": 28763.0,
+                "unit": "GBP",
+                "from_call": 1,
+                "calc": "sum",
+                "inputs": [
+                  45289,
+                  38912,
+                  32157,
+                  28763,
+                  25410
+                ]
+              },
+              {
+                "text": "Socks (Multi-Pack) generated \u00a325,410 in revenue during 2011.",
+                "value": 25410.0,
+                "unit": "GBP",
+                "from_call": 1,
+                "calc": "sum",
+                "inputs": [
+                  45289,
+                  38912,
+                  32157,
+                  28763,
+                  25410
+                ]
+              }
+            ],
+            "insufficient_data": false
+          }
+        }
+      ],
+      "elapsed_seconds": 21.7,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 21.7,
+        "error": null,
+        "claims": 5,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 5,
+        "undeclared": 5,
+        "evidence_coverage": 0.0,
+        "unsupported_rate": 1.0,
+        "queries": 0,
+        "queries_ok": null,
+        "tool_selection_correct": 0.0,
+        "chart_correct": 0.0
+      }
+    },
+    {
+      "id": "q07",
+      "tier": 2,
+      "question": "List the five products that generated the most revenue in 2011, with the revenue for each.",
+      "expected": [
+        {
+          "stock_code": "22423",
+          "description": "REGENCY CAKESTAND 3 TIER",
+          "revenue": 146461.78
+        },
+        {
+          "stock_code": "47566",
+          "description": "PARTY BUNTING",
+          "revenue": 98237.49
+        },
+        {
+          "stock_code": "85123A",
+          "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+          "revenue": 94027.39
+        },
+        {
+          "stock_code": "85099B",
+          "description": "JUMBO BAG RED RETROSPOT",
+          "revenue": 90140.66
+        },
+        {
+          "stock_code": "23084",
+          "description": "RABBIT NIGHT LIGHT",
+          "revenue": 66870.03
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "List the five products that generated the most revenue in 2011, with the revenue for each.",
+        "tier": 2,
+        "findings": "REGENCY CAKESTAND 3 TIER: \u00a3146,461.78. PARTY BUNTING: \u00a398,237.49. WHITE HANGING HEART T-LIGHT HOLDER: \u00a394,027.39. JUMBO BAG RED RETROSPOT: \u00a390,140.66. RABBIT NIGHT LIGHT: \u00a366,870.03. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "REGENCY CAKESTAND 3 TIER: \u00a3146,461.78.",
+            "value": 146461.78,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "revenue",
+            "kind": "number"
+          },
+          {
+            "text": "PARTY BUNTING: \u00a398,237.49.",
+            "value": 98237.49,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 1,
+            "column": "revenue",
+            "kind": "number"
+          },
+          {
+            "text": "WHITE HANGING HEART T-LIGHT HOLDER: \u00a394,027.39.",
+            "value": 94027.39,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 2,
+            "column": "revenue",
+            "kind": "number"
+          },
+          {
+            "text": "JUMBO BAG RED RETROSPOT: \u00a390,140.66.",
+            "value": 90140.66,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 3,
+            "column": "revenue",
+            "kind": "number"
+          },
+          {
+            "text": "RABBIT NIGHT LIGHT: \u00a366,870.03.",
+            "value": 66870.03,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 4,
+            "column": "revenue",
+            "kind": "number"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "stock_code",
+          "is_product",
+          "is_outlier",
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011 AND is_product AND NOT is_outlier"
+        ],
+        "chart": {
+          "type": "bar",
+          "source_tool_call": 0,
+          "x": "description",
+          "y": "revenue",
+          "title": "Leading products"
+        },
+        "insufficient_data": false,
+        "limitations": "Cancellations, non-product lines and flagged outliers are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "ok": true,
+            "rows": [
+              {
+                "stock_code": "22423",
+                "description": "REGENCY CAKESTAND 3 TIER",
+                "revenue": 146461.78
+              },
+              {
+                "stock_code": "47566",
+                "description": "PARTY BUNTING",
+                "revenue": 98237.49
+              },
+              {
+                "stock_code": "85123A",
+                "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+                "revenue": 94027.39
+              },
+              {
+                "stock_code": "85099B",
+                "description": "JUMBO BAG RED RETROSPOT",
+                "revenue": 90140.66
+              },
+              {
+                "stock_code": "23084",
+                "description": "RABBIT NIGHT LIGHT",
+                "revenue": 66870.03
+              }
+            ],
+            "error": null
+          },
+          {
+            "n": 1,
+            "tool": "make_chart",
+            "code": "{\"type\": \"bar\", \"source_tool_call\": 0, \"x\": \"description\", \"y\": \"revenue\", \"title\": \"Leading products\"}",
+            "ok": true,
+            "rows": [
+              {
+                "type": "bar",
+                "source_tool_call": 0,
+                "x": "description",
+                "y": "revenue",
+                "title": "Leading products"
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.03,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern"
+      },
+      "visible_claims": [
+        {
+          "text": "REGENCY CAKESTAND 3 TIER: \u00a3146,461.78.",
+          "value": 146461.78,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "revenue",
+          "kind": "number"
+        },
+        {
+          "text": "PARTY BUNTING: \u00a398,237.49.",
+          "value": 98237.49,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 1,
+          "column": "revenue",
+          "kind": "number"
+        },
+        {
+          "text": "WHITE HANGING HEART T-LIGHT HOLDER: \u00a394,027.39.",
+          "value": 94027.39,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 2,
+          "column": "revenue",
+          "kind": "number"
+        },
+        {
+          "text": "JUMBO BAG RED RETROSPOT: \u00a390,140.66.",
+          "value": 90140.66,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 3,
+          "column": "revenue",
+          "kind": "number"
+        },
+        {
+          "text": "RABBIT NIGHT LIGHT: \u00a366,870.03.",
+          "value": 66870.03,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 4,
+          "column": "revenue",
+          "kind": "number"
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.59,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.59,
+        "error": null,
+        "claims": 5,
+        "supported": 5,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 2,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    },
+    {
+      "id": "q07",
+      "tier": 3,
+      "question": "List the five products that generated the most revenue in 2011, with the revenue for each.",
+      "expected": [
+        {
+          "stock_code": "22423",
+          "description": "REGENCY CAKESTAND 3 TIER",
+          "revenue": 146461.78
+        },
+        {
+          "stock_code": "47566",
+          "description": "PARTY BUNTING",
+          "revenue": 98237.49
+        },
+        {
+          "stock_code": "85123A",
+          "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+          "revenue": 94027.39
+        },
+        {
+          "stock_code": "85099B",
+          "description": "JUMBO BAG RED RETROSPOT",
+          "revenue": 90140.66
+        },
+        {
+          "stock_code": "23084",
+          "description": "RABBIT NIGHT LIGHT",
+          "revenue": 66870.03
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "List the five products that generated the most revenue in 2011, with the revenue for each.",
+        "tier": 3,
+        "findings": "REGENCY CAKESTAND 3 TIER: \u00a3146,461.78. PARTY BUNTING: \u00a398,237.49. WHITE HANGING HEART T-LIGHT HOLDER: \u00a394,027.39. JUMBO BAG RED RETROSPOT: \u00a390,140.66. RABBIT NIGHT LIGHT: \u00a366,870.03. Cancellations are excluded.",
+        "claims": [
+          {
+            "text": "REGENCY CAKESTAND 3 TIER: \u00a3146,461.78.",
+            "value": 146461.78,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "problem": null
+          },
+          {
+            "text": "PARTY BUNTING: \u00a398,237.49.",
+            "value": 98237.49,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 1,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "problem": null
+          },
+          {
+            "text": "WHITE HANGING HEART T-LIGHT HOLDER: \u00a394,027.39.",
+            "value": 94027.39,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 2,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "problem": null
+          },
+          {
+            "text": "JUMBO BAG RED RETROSPOT: \u00a390,140.66.",
+            "value": 90140.66,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 3,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "problem": null
+          },
+          {
+            "text": "RABBIT NIGHT LIGHT: \u00a366,870.03.",
+            "value": 66870.03,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 4,
+            "column": "revenue",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "stock_code",
+          "is_product",
+          "is_outlier",
+          "is_cancellation",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND YEAR(invoice_date) = 2011 AND is_product AND NOT is_outlier"
+        ],
+        "chart": {
+          "type": "bar",
+          "source_tool_call": 0,
+          "x": "description",
+          "y": "revenue",
+          "title": "Leading products"
+        },
+        "insufficient_data": false,
+        "limitations": "Cancellations, non-product lines and flagged outliers are excluded.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+            "ok": true,
+            "rows": [
+              {
+                "stock_code": "22423",
+                "description": "REGENCY CAKESTAND 3 TIER",
+                "revenue": 146461.78
+              },
+              {
+                "stock_code": "47566",
+                "description": "PARTY BUNTING",
+                "revenue": 98237.49
+              },
+              {
+                "stock_code": "85123A",
+                "description": "WHITE HANGING HEART T-LIGHT HOLDER",
+                "revenue": 94027.39
+              },
+              {
+                "stock_code": "85099B",
+                "description": "JUMBO BAG RED RETROSPOT",
+                "revenue": 90140.66
+              },
+              {
+                "stock_code": "23084",
+                "description": "RABBIT NIGHT LIGHT",
+                "revenue": 66870.03
+              }
+            ],
+            "error": null
+          },
+          {
+            "n": 1,
+            "tool": "make_chart",
+            "code": "{\"type\": \"bar\", \"source_tool_call\": 0, \"x\": \"description\", \"y\": \"revenue\", \"title\": \"Leading products\"}",
+            "ok": true,
+            "rows": [
+              {
+                "type": "bar",
+                "source_tool_call": 0,
+                "x": "description",
+                "y": "revenue",
+                "title": "Leading products"
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.0,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "REGENCY CAKESTAND 3 TIER: \u00a3146,461.78.",
+          "value": 146461.78,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+          "problem": null
+        },
+        {
+          "text": "PARTY BUNTING: \u00a398,237.49.",
+          "value": 98237.49,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 1,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+          "problem": null
+        },
+        {
+          "text": "WHITE HANGING HEART T-LIGHT HOLDER: \u00a394,027.39.",
+          "value": 94027.39,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 2,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+          "problem": null
+        },
+        {
+          "text": "JUMBO BAG RED RETROSPOT: \u00a390,140.66.",
+          "value": 90140.66,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 3,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+          "problem": null
+        },
+        {
+          "text": "RABBIT NIGHT LIGHT: \u00a366,870.03.",
+          "value": 66870.03,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 4,
+          "column": "revenue",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT stock_code, mode(description) AS description, ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 AND is_product AND NOT is_outlier GROUP BY stock_code ORDER BY revenue DESC, stock_code LIMIT 5",
+          "problem": null
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.5,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.5,
+        "error": null,
+        "claims": 5,
+        "supported": 5,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 2,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0
+      }
+    }
+  ]
+}

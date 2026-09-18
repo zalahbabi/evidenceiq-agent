@@ -1,0 +1,133 @@
+[
+  {
+    "tier": 1,
+    "question": "What was our total revenue in 2011?",
+    "findings": "To determine the total revenue in 2011, I need to sum the sales data for December 2009, December 2010, and December 2011. Unfortunately, the provided data does not include the specific sales figures for each of these months. Therefore, I cannot calculate the total revenue for 2011.",
+    "refused": true,
+    "claims": [],
+    "seconds": 150.5,
+    "retries": 0,
+    "limitations": null,
+    "log": [],
+    "undeclared": null
+  },
+  {
+    "tier": 2,
+    "question": "What was our total revenue in 2011?",
+    "findings": "[call 1] The total revenue in 2011, excluding cancellations, was 9,809,614.01.",
+    "refused": false,
+    "claims": [
+      {
+        "text": "The total revenue in 2011, excluding cancellations, was 9809614.01",
+        "value": 9809614.01,
+        "unit": "currency",
+        "from_call": 1,
+        "calc": "sum",
+        "inputs": [
+          9809614.01
+        ]
+      }
+    ],
+    "seconds": 1058.0,
+    "retries": 0,
+    "limitations": null,
+    "log": [
+      {
+        "n": 0,
+        "tool": "run_sql",
+        "code": "SELECT ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation",
+        "ok": false,
+        "rows": [],
+        "error": "The question names a reporting year. Add the requested date/year restriction to WHERE; do not return an all-time total."
+      },
+      {
+        "n": 1,
+        "tool": "run_sql",
+        "code": "SELECT ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+        "ok": true,
+        "rows": [
+          {
+            "revenue": 9809614.01
+          }
+        ],
+        "error": null
+      }
+    ],
+    "undeclared": null
+  },
+  {
+    "tier": 3,
+    "question": "What was our total revenue in 2011?",
+    "findings": "The total revenue in 2011, excluding cancellations, was 9,809,614.01.",
+    "refused": false,
+    "claims": [
+      {
+        "text": "The total revenue in 2011, excluding cancellations, was 9,809,614.01.",
+        "value": 9809614.01,
+        "unit": "GBP",
+        "from_call": 0,
+        "calc": "sum",
+        "inputs": [
+          9809614.01
+        ],
+        "status": "supported",
+        "evidence": "Recalculated sum from calls [0]",
+        "problem": null
+      }
+    ],
+    "seconds": 3631.5,
+    "retries": 2,
+    "limitations": "",
+    "log": [
+      {
+        "n": 0,
+        "tool": "run_sql",
+        "code": "SELECT ROUND(SUM(revenue),2) AS revenue FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011",
+        "ok": true,
+        "rows": [
+          {
+            "revenue": 9809614.01
+          }
+        ],
+        "error": null
+      }
+    ],
+    "undeclared": []
+  },
+  {
+    "tier": 1,
+    "question": "What was our profit margin in 2011?",
+    "findings": "Insufficient data to determine profit margin in 2011.",
+    "refused": true,
+    "claims": [],
+    "seconds": 1.3,
+    "retries": 0,
+    "limitations": null,
+    "log": [],
+    "undeclared": null
+  },
+  {
+    "tier": 2,
+    "question": "What was our profit margin in 2011?",
+    "findings": "This dataset contains sales transactions, but not the cost, promotion or other external data needed to answer this question.",
+    "refused": true,
+    "claims": [],
+    "seconds": 0.0,
+    "retries": 0,
+    "limitations": "This dataset contains sales transactions, but not the cost, promotion or other external data needed to answer this question.",
+    "log": [],
+    "undeclared": null
+  },
+  {
+    "tier": 3,
+    "question": "What was our profit margin in 2011?",
+    "findings": "This dataset contains sales transactions, but not the cost, promotion or other external data needed to answer this question.",
+    "refused": true,
+    "claims": [],
+    "seconds": 0.0,
+    "retries": 0,
+    "limitations": "This dataset contains sales transactions, but not the cost, promotion or other external data needed to answer this question.",
+    "log": [],
+    "undeclared": []
+  }
+]

@@ -1,0 +1,3011 @@
+{
+  "started_at": "2026-09-16T07:55:42.582307+00:00",
+  "model": "gemma3:4b",
+  "timeout_seconds": 180,
+  "packages": {
+    "duckdb": "1.5.5",
+    "pandas": "3.0.5",
+    "streamlit": "1.64.0",
+    "sqlglot": "30.18.0",
+    "ollama": "0.6.2"
+  },
+  "scope": "Selected examples; not the full benchmark.",
+  "results": [
+    {
+      "id": "q09",
+      "tier": 2,
+      "question": "Which month had the highest revenue across the whole dataset, and what was that revenue?",
+      "expected": [
+        {
+          "invoice_month": "2011-11",
+          "revenue": 1503866.78,
+          "trading_days": 26
+        }
+      ],
+      "status": "FAIL",
+      "notes": [
+        "The visible answer does not contain every expected measurement/fact with its correct label."
+      ],
+      "answer": {
+        "question": "Which month had the highest revenue across the whole dataset, and what was that revenue?",
+        "tier": 2,
+        "findings": "[call 1] The highest revenue occurred in November 2011, with a revenue of 1503866.78.",
+        "claims": [
+          {
+            "text": "November 2011",
+            "value": 1503866.78,
+            "unit": "revenue",
+            "from_call": 1,
+            "calc": "none",
+            "inputs": []
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "invoice_month",
+          "is_cancellation"
+        ],
+        "filters_used": [
+          "NOT is_cancellation"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": null,
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT invoice_month, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier GROUP BY invoice_month ORDER BY revenue DESC LIMIT 1",
+            "ok": false,
+            "rows": [],
+            "error": "Overall revenue must not use product-only or outlier exclusions."
+          },
+          {
+            "n": 1,
+            "tool": "run_sql",
+            "code": "SELECT invoice_month, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation GROUP BY invoice_month ORDER BY revenue DESC LIMIT 1",
+            "ok": true,
+            "rows": [
+              {
+                "invoice_month": "2011-11",
+                "revenue": 1503866.78
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: Retrieve the total revenue for each month from the sales table, excluding cancellations and considering only products and non-outliers."
+        ],
+        "usage": {
+          "model_calls": 4,
+          "input_tokens": 3396,
+          "output_tokens": 299
+        },
+        "seconds": 18.3
+      },
+      "visible_claims": [
+        {
+          "text": "November 2011",
+          "value": 1503866.78,
+          "unit": "revenue",
+          "from_call": 1,
+          "calc": "none",
+          "inputs": []
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the total revenue for each month from the sales table, excluding cancellations and considering only products and non-outliers."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 539,
+              "output_tokens": 73
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT invoice_month, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier GROUP BY invoice_month ORDER BY revenue DESC LIMIT 1",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1014,
+              "output_tokens": 57
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT invoice_month, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation GROUP BY invoice_month ORDER BY revenue DESC LIMIT 1",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1081,
+              "output_tokens": 48
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 1] The highest revenue occurred in November 2011, with a revenue of 1503866.78.",
+            "claims": [
+              {
+                "text": "November 2011",
+                "value": 1503866.78,
+                "unit": "revenue",
+                "from_call": 1,
+                "calc": "none",
+                "inputs": []
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 762,
+              "output_tokens": 121
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 18.91,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 18.91,
+        "error": null,
+        "claims": 1,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 1,
+        "undeclared": 0,
+        "evidence_coverage": 0.0,
+        "unsupported_rate": 1.0,
+        "queries": 2,
+        "queries_ok": 0.5,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 0.0,
+        "model_calls": 4,
+        "input_tokens": 3396,
+        "output_tokens": 299
+      }
+    },
+    {
+      "id": "q09",
+      "tier": 3,
+      "question": "Which month had the highest revenue across the whole dataset, and what was that revenue?",
+      "expected": [
+        {
+          "invoice_month": "2011-11",
+          "revenue": 1503866.78,
+          "trading_days": 26
+        }
+      ],
+      "status": "FAIL",
+      "notes": [
+        "The visible answer does not contain every expected measurement/fact with its correct label."
+      ],
+      "answer": {
+        "question": "Which month had the highest revenue across the whole dataset, and what was that revenue?",
+        "tier": 3,
+        "findings": "November 2011 had the highest revenue across the whole dataset, which was \u00a31,503,866.78.",
+        "claims": [
+          {
+            "text": "November 2011 had the highest revenue across the whole dataset, which was \u00a31,503,866.78.",
+            "value": 1503866.78,
+            "unit": "GBP",
+            "from_call": 1,
+            "calc": "none",
+            "inputs": [
+              1503866.78
+            ],
+            "status": "supported",
+            "evidence": "SELECT invoice_month, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation GROUP BY invoice_month ORDER BY revenue DESC LIMIT 1",
+            "problem": null,
+            "row": 0,
+            "column": "revenue"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "invoice_month",
+          "is_cancellation"
+        ],
+        "filters_used": [
+          "NOT is_cancellation"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": "",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT invoice_month, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier GROUP BY invoice_month ORDER BY revenue DESC LIMIT 1",
+            "ok": false,
+            "rows": [],
+            "error": "Overall revenue must not use product-only or outlier exclusions."
+          },
+          {
+            "n": 1,
+            "tool": "run_sql",
+            "code": "SELECT invoice_month, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation GROUP BY invoice_month ORDER BY revenue DESC LIMIT 1",
+            "ok": true,
+            "rows": [
+              {
+                "invoice_month": "2011-11",
+                "revenue": 1503866.78
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 1,
+        "plan": [
+          "run_sql: Retrieve the total revenue for each month from the sales table, excluding cancellations and filtering for valid products."
+        ],
+        "usage": {
+          "model_calls": 8,
+          "input_tokens": 6854,
+          "output_tokens": 611
+        },
+        "seconds": 35.6,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "November 2011 had the highest revenue across the whole dataset, which was \u00a31,503,866.78.",
+          "value": 1503866.78,
+          "unit": "GBP",
+          "from_call": 1,
+          "calc": "none",
+          "inputs": [
+            1503866.78
+          ],
+          "status": "supported",
+          "evidence": "SELECT invoice_month, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation GROUP BY invoice_month ORDER BY revenue DESC LIMIT 1",
+          "problem": null,
+          "row": 0,
+          "column": "revenue"
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the total revenue for each month from the sales table, excluding cancellations and considering only products and non-outliers."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 539,
+              "output_tokens": 73
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT invoice_month, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier GROUP BY invoice_month ORDER BY revenue DESC LIMIT 1",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1014,
+              "output_tokens": 57
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT invoice_month, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation GROUP BY invoice_month ORDER BY revenue DESC LIMIT 1",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1081,
+              "output_tokens": 48
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 1] The highest revenue occurred in November 2011, with a revenue of 1503866.78.",
+            "claims": [
+              {
+                "text": "November 2011",
+                "value": 1503866.78,
+                "unit": "revenue",
+                "from_call": 1,
+                "calc": "none",
+                "inputs": []
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 762,
+              "output_tokens": 121
+            }
+          }
+        },
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the total revenue for each month from the sales table, excluding cancellations and filtering for valid products."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 573,
+              "output_tokens": 72
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT invoice_month, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier GROUP BY invoice_month ORDER BY revenue DESC LIMIT 1",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1010,
+              "output_tokens": 57
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT invoice_month, ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation GROUP BY invoice_month ORDER BY revenue DESC LIMIT 1",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1077,
+              "output_tokens": 48
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 1] run_sql",
+            "claims": [
+              {
+                "text": "November 2011 had the highest revenue across the whole dataset, which was \u00a31,503,866.78.",
+                "value": 1503866.78,
+                "unit": "GBP",
+                "from_call": 1,
+                "calc": "none",
+                "inputs": [
+                  1503866.78
+                ]
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 798,
+              "output_tokens": 135
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 36.25,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 36.25,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 2,
+        "queries_ok": 0.5,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 0.0,
+        "model_calls": 8,
+        "input_tokens": 6854,
+        "output_tokens": 611
+      }
+    },
+    {
+      "id": "q10",
+      "tier": 2,
+      "question": "What was our cancellation rate in 2011?",
+      "expected": [
+        {
+          "pct": 17.24
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "What was our cancellation rate in 2011?",
+        "tier": 2,
+        "findings": "Cancellation invoices were 17.24% of completed orders.",
+        "claims": [
+          {
+            "text": "Cancellation invoices were 17.24% of completed orders.",
+            "value": 17.24,
+            "unit": "%",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "cancellation_rate",
+            "kind": "number"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "invoice_date",
+          "is_cancellation",
+          "invoice_no"
+        ],
+        "filters_used": [
+          "YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellation invoices cannot be linked to their original orders. This is a ratio of cancellations to completed orders in the same period, not the share of orders later cancelled.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT ROUND(100.0 * COUNT(DISTINCT CASE WHEN is_cancellation THEN invoice_no END) / NULLIF(COUNT(DISTINCT CASE WHEN NOT is_cancellation THEN invoice_no END),0),2) AS cancellation_rate FROM sales WHERE year(invoice_date) = 2011",
+            "ok": true,
+            "rows": [
+              {
+                "cancellation_rate": 17.24
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.23,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "usage": {
+          "model_calls": 0,
+          "input_tokens": 0,
+          "output_tokens": 0
+        }
+      },
+      "visible_claims": [
+        {
+          "text": "Cancellation invoices were 17.24% of completed orders.",
+          "value": 17.24,
+          "unit": "%",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "cancellation_rate",
+          "kind": "number"
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 1.21,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 1.21,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0,
+        "model_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0
+      }
+    },
+    {
+      "id": "q10",
+      "tier": 3,
+      "question": "What was our cancellation rate in 2011?",
+      "expected": [
+        {
+          "pct": 17.24
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "What was our cancellation rate in 2011?",
+        "tier": 3,
+        "findings": "Cancellation invoices were 17.24% of completed orders.",
+        "claims": [
+          {
+            "text": "Cancellation invoices were 17.24% of completed orders.",
+            "value": 17.24,
+            "unit": "%",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "row": 0,
+            "column": "cancellation_rate",
+            "kind": "number",
+            "status": "supported",
+            "evidence": "SELECT ROUND(100.0 * COUNT(DISTINCT CASE WHEN is_cancellation THEN invoice_no END) / NULLIF(COUNT(DISTINCT CASE WHEN NOT is_cancellation THEN invoice_no END),0),2) AS cancellation_rate FROM sales WHERE year(invoice_date) = 2011",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "invoice_date",
+          "is_cancellation",
+          "invoice_no"
+        ],
+        "filters_used": [
+          "YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "insufficient_data": false,
+        "limitations": "Cancellation invoices cannot be linked to their original orders. This is a ratio of cancellations to completed orders in the same period, not the share of orders later cancelled.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT ROUND(100.0 * COUNT(DISTINCT CASE WHEN is_cancellation THEN invoice_no END) / NULLIF(COUNT(DISTINCT CASE WHEN NOT is_cancellation THEN invoice_no END),0),2) AS cancellation_rate FROM sales WHERE year(invoice_date) = 2011",
+            "ok": true,
+            "rows": [
+              {
+                "cancellation_rate": 17.24
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: use the matching KPI query pattern"
+        ],
+        "seconds": 0.0,
+        "route": "query_pattern",
+        "scope_check": "matching KPI query pattern",
+        "usage": {
+          "model_calls": 0,
+          "input_tokens": 0,
+          "output_tokens": 0
+        },
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "Cancellation invoices were 17.24% of completed orders.",
+          "value": 17.24,
+          "unit": "%",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "row": 0,
+          "column": "cancellation_rate",
+          "kind": "number",
+          "status": "supported",
+          "evidence": "SELECT ROUND(100.0 * COUNT(DISTINCT CASE WHEN is_cancellation THEN invoice_no END) / NULLIF(COUNT(DISTINCT CASE WHEN NOT is_cancellation THEN invoice_no END),0),2) AS cancellation_rate FROM sales WHERE year(invoice_date) = 2011",
+          "problem": null
+        }
+      ],
+      "model_calls": [],
+      "elapsed_seconds": 0.5,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "query_pattern",
+        "seconds": 0.5,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0,
+        "model_calls": 0,
+        "input_tokens": 0,
+        "output_tokens": 0
+      }
+    },
+    {
+      "id": "q16",
+      "tier": 2,
+      "question": "How many trading days were there in November 2011?",
+      "expected": [
+        {
+          "trading_days": 26
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many trading days were there in November 2011?",
+        "tier": 2,
+        "findings": "[call 0] trading_days were 26 in November 2011.",
+        "claims": [
+          {
+            "text": "trading_days",
+            "value": 26,
+            "unit": "days",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": []
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "trading_days",
+          "invoice_month"
+        ],
+        "filters_used": [
+          "invoice_month = '2011-11'"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": null,
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT trading_days FROM dim_month WHERE invoice_month = '2011-11'",
+            "ok": true,
+            "rows": [
+              {
+                "trading_days": 26
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: Retrieve the trading days for November 2011 from dim_month."
+        ],
+        "usage": {
+          "model_calls": 3,
+          "input_tokens": 2191,
+          "output_tokens": 194
+        },
+        "seconds": 11.2
+      },
+      "visible_claims": [
+        {
+          "text": "trading_days",
+          "value": 26,
+          "unit": "days",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": []
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the trading days for November 2011 from dim_month."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 536,
+              "output_tokens": 65
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT trading_days FROM dim_month WHERE invoice_month = '2011-11'",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1003,
+              "output_tokens": 32
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 0] trading_days were 26 in November 2011.",
+            "claims": [
+              {
+                "text": "trading_days",
+                "value": 26,
+                "unit": "days",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": []
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 652,
+              "output_tokens": 97
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 11.79,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 11.79,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0,
+        "model_calls": 3,
+        "input_tokens": 2191,
+        "output_tokens": 194
+      }
+    },
+    {
+      "id": "q16",
+      "tier": 3,
+      "question": "How many trading days were there in November 2011?",
+      "expected": [
+        {
+          "trading_days": 26
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many trading days were there in November 2011?",
+        "tier": 3,
+        "findings": "trading_days were 26 in November 2011.",
+        "claims": [
+          {
+            "text": "trading_days",
+            "value": 26,
+            "unit": "days",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "status": "supported",
+            "evidence": "SELECT trading_days FROM dim_month WHERE invoice_month = '2011-11'",
+            "problem": null,
+            "row": 0,
+            "column": "trading_days"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "trading_days",
+          "invoice_month"
+        ],
+        "filters_used": [
+          "invoice_month = '2011-11'"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": "",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT trading_days FROM dim_month WHERE invoice_month = '2011-11'",
+            "ok": true,
+            "rows": [
+              {
+                "trading_days": 26
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: Retrieve the trading days for November 2011 from dim_month."
+        ],
+        "usage": {
+          "model_calls": 3,
+          "input_tokens": 2191,
+          "output_tokens": 194
+        },
+        "seconds": 11.7,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "trading_days",
+          "value": 26,
+          "unit": "days",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "status": "supported",
+          "evidence": "SELECT trading_days FROM dim_month WHERE invoice_month = '2011-11'",
+          "problem": null,
+          "row": 0,
+          "column": "trading_days"
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the trading days for November 2011 from dim_month."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 536,
+              "output_tokens": 65
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT trading_days FROM dim_month WHERE invoice_month = '2011-11'",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1003,
+              "output_tokens": 32
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 0] trading_days were 26 in November 2011.",
+            "claims": [
+              {
+                "text": "trading_days",
+                "value": 26,
+                "unit": "days",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": []
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 652,
+              "output_tokens": 97
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 12.25,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 12.25,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0,
+        "model_calls": 3,
+        "input_tokens": 2191,
+        "output_tokens": 194
+      }
+    },
+    {
+      "id": "q17",
+      "tier": 2,
+      "question": "How much revenue came from France in 2011?",
+      "expected": [
+        {
+          "revenue": 200027.06
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How much revenue came from France in 2011?",
+        "tier": 2,
+        "findings": "[call 0] The revenue from France in 2011, excluding cancellations, was 200027.06.",
+        "claims": [
+          {
+            "text": "The revenue from France in 2011, excluding cancellations, was 200027.06",
+            "value": 200027.06,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": []
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "is_cancellation",
+          "country",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND country = 'France' AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": null,
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND country = 'France' AND year(invoice_date) = 2011",
+            "ok": true,
+            "rows": [
+              {
+                "revenue": 200027.06
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: Retrieve all sales data for France in 2011."
+        ],
+        "usage": {
+          "model_calls": 3,
+          "input_tokens": 2207,
+          "output_tokens": 249
+        },
+        "seconds": 14.5
+      },
+      "visible_claims": [
+        {
+          "text": "The revenue from France in 2011, excluding cancellations, was 200027.06",
+          "value": 200027.06,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": []
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve all sales data for France in 2011."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 535,
+              "output_tokens": 62
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND country = 'France' AND year(invoice_date) = 2011",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 999,
+              "output_tokens": 50
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 0] The revenue from France in 2011, excluding cancellations, was 200027.06.",
+            "claims": [
+              {
+                "text": "The revenue from France in 2011, excluding cancellations, was 200027.06",
+                "value": 200027.06,
+                "unit": "GBP",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": []
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 673,
+              "output_tokens": 137
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 14.97,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 14.97,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0,
+        "model_calls": 3,
+        "input_tokens": 2207,
+        "output_tokens": 249
+      }
+    },
+    {
+      "id": "q17",
+      "tier": 3,
+      "question": "How much revenue came from France in 2011?",
+      "expected": [
+        {
+          "revenue": 200027.06
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How much revenue came from France in 2011?",
+        "tier": 3,
+        "findings": "The revenue from France in 2011, excluding cancellations, was 200027.06.",
+        "claims": [
+          {
+            "text": "The revenue from France in 2011, excluding cancellations, was 200027.06",
+            "value": 200027.06,
+            "unit": "GBP",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [],
+            "status": "supported",
+            "evidence": "SELECT ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND country = 'France' AND year(invoice_date) = 2011",
+            "problem": null,
+            "row": 0,
+            "column": "revenue"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "is_cancellation",
+          "country",
+          "invoice_date"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND country = 'France' AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": "",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND country = 'France' AND year(invoice_date) = 2011",
+            "ok": true,
+            "rows": [
+              {
+                "revenue": 200027.06
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: Retrieve all sales data for France in 2011."
+        ],
+        "usage": {
+          "model_calls": 3,
+          "input_tokens": 2207,
+          "output_tokens": 249
+        },
+        "seconds": 15.1,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "The revenue from France in 2011, excluding cancellations, was 200027.06",
+          "value": 200027.06,
+          "unit": "GBP",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [],
+          "status": "supported",
+          "evidence": "SELECT ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND country = 'France' AND year(invoice_date) = 2011",
+          "problem": null,
+          "row": 0,
+          "column": "revenue"
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve all sales data for France in 2011."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 535,
+              "output_tokens": 62
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND country = 'France' AND year(invoice_date) = 2011",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 999,
+              "output_tokens": 50
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 0] The revenue from France in 2011, excluding cancellations, was 200027.06.",
+            "claims": [
+              {
+                "text": "The revenue from France in 2011, excluding cancellations, was 200027.06",
+                "value": 200027.06,
+                "unit": "GBP",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": []
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 673,
+              "output_tokens": 137
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 15.6,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 15.6,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0,
+        "model_calls": 3,
+        "input_tokens": 2207,
+        "output_tokens": 249
+      }
+    },
+    {
+      "id": "q18",
+      "tier": 2,
+      "question": "How many orders did customer 18102 place across the whole dataset?",
+      "expected": [
+        {
+          "orders": 145
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many orders did customer 18102 place across the whole dataset?",
+        "tier": 2,
+        "findings": "[call 1] The customer 18102 placed 145 orders across the whole dataset. This is based on counting distinct invoice numbers where cancellations are excluded and quantity is greater than 0.",
+        "claims": [
+          {
+            "text": "The customer 18102 placed 145 orders across the whole dataset.",
+            "value": 145,
+            "unit": "orders",
+            "from_call": 1,
+            "calc": "none",
+            "inputs": []
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "invoice_no",
+          "customer_id",
+          "is_cancellation"
+        ],
+        "filters_used": [
+          "customer_id = 18102 AND NOT is_cancellation"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": null,
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT count(invoice_no) FROM sales WHERE customer_id = 18102 AND quantity > 0",
+            "ok": false,
+            "rows": [],
+            "error": "Completed orders require COUNT(DISTINCT invoice_no) and WHERE NOT is_cancellation. Counting invoice lines is not counting orders."
+          },
+          {
+            "n": 1,
+            "tool": "run_sql",
+            "code": "SELECT count(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "ok": true,
+            "rows": [
+              {
+                "count(DISTINCT invoice_no)": 145
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: Identify all rows where customer_id is 18102 and quantity > 0. This will give us all the orders placed by this customer."
+        ],
+        "usage": {
+          "model_calls": 4,
+          "input_tokens": 3378,
+          "output_tokens": 296
+        },
+        "seconds": 18.9
+      },
+      "visible_claims": [
+        {
+          "text": "The customer 18102 placed 145 orders across the whole dataset.",
+          "value": 145,
+          "unit": "orders",
+          "from_call": 1,
+          "calc": "none",
+          "inputs": []
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Identify all rows where customer_id is 18102 and quantity > 0. This will give us all the orders placed by this customer."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 539,
+              "output_tokens": 84
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT count(invoice_no) FROM sales WHERE customer_id = 18102 AND quantity > 0",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1022,
+              "output_tokens": 36
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT count(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1083,
+              "output_tokens": 39
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 1] The customer 18102 placed 145 orders across the whole dataset. This is based on counting distinct invoice numbers where cancellations are excluded and quantity is greater than 0.",
+            "claims": [
+              {
+                "text": "The customer 18102 placed 145 orders across the whole dataset.",
+                "value": 145,
+                "unit": "orders",
+                "from_call": 1,
+                "calc": "none",
+                "inputs": []
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 734,
+              "output_tokens": 137
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 19.51,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 19.51,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 1,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 2,
+        "queries_ok": 0.5,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0,
+        "model_calls": 4,
+        "input_tokens": 3378,
+        "output_tokens": 296
+      }
+    },
+    {
+      "id": "q18",
+      "tier": 3,
+      "question": "How many orders did customer 18102 place across the whole dataset?",
+      "expected": [
+        {
+          "orders": 145
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How many orders did customer 18102 place across the whole dataset?",
+        "tier": 3,
+        "findings": "Customer 18102 placed 145 orders across the whole dataset.",
+        "claims": [
+          {
+            "text": "Customer 18102 placed 145 orders across the whole dataset.",
+            "value": 145,
+            "unit": "orders",
+            "from_call": 1,
+            "calc": "none",
+            "inputs": [],
+            "status": "supported",
+            "evidence": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "problem": null,
+            "row": 0,
+            "column": "count(DISTINCT invoice_no)"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "invoice_no",
+          "customer_id",
+          "is_cancellation"
+        ],
+        "filters_used": [
+          "customer_id = 18102 AND NOT is_cancellation"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": "",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(invoice_no) FROM sales WHERE customer_id = 18102",
+            "ok": false,
+            "rows": [],
+            "error": "Completed orders require COUNT(DISTINCT invoice_no) and WHERE NOT is_cancellation. Counting invoice lines is not counting orders."
+          },
+          {
+            "n": 1,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "ok": true,
+            "rows": [
+              {
+                "count(DISTINCT invoice_no)": 145
+              }
+            ],
+            "error": null
+          },
+          {
+            "n": 2,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102",
+            "ok": false,
+            "rows": [],
+            "error": "Completed orders require COUNT(DISTINCT invoice_no) and WHERE NOT is_cancellation. Counting invoice lines is not counting orders."
+          },
+          {
+            "n": 3,
+            "tool": "run_sql",
+            "code": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "ok": true,
+            "rows": [
+              {
+                "count(DISTINCT invoice_no)": 145
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 1,
+        "plan": [
+          "run_sql: Identify all invoice lines where customer_id is 18102.  This will give us all orders placed by that customer.",
+          "run_sql: Count the number of rows returned from the previous query. This represents the total number of orders placed by customer 18102."
+        ],
+        "usage": {
+          "model_calls": 10,
+          "input_tokens": 9013,
+          "output_tokens": 687
+        },
+        "seconds": 46.4,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "Customer 18102 placed 145 orders across the whole dataset.",
+          "value": 145,
+          "unit": "orders",
+          "from_call": 1,
+          "calc": "none",
+          "inputs": [],
+          "status": "supported",
+          "evidence": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+          "problem": null,
+          "row": 0,
+          "column": "count(DISTINCT invoice_no)"
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Identify all rows where customer_id is 18102 and quantity > 0. This will give us all the orders placed by this customer."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 539,
+              "output_tokens": 84
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT count(invoice_no) FROM sales WHERE customer_id = 18102 AND quantity > 0",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1022,
+              "output_tokens": 36
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT count(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1083,
+              "output_tokens": 39
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 1] The customer 18102 placed 145 orders across the whole dataset. This is based on counting distinct invoice numbers where cancellations are excluded and quantity is greater than 0.",
+            "claims": [
+              {
+                "text": "The customer 18102 placed 145 orders across the whole dataset.",
+                "value": 145,
+                "unit": "orders",
+                "from_call": 1,
+                "calc": "none",
+                "inputs": []
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 734,
+              "output_tokens": 137
+            }
+          }
+        },
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Identify all invoice lines where customer_id is 18102.  This will give us all orders placed by that customer."
+              },
+              {
+                "step": 2,
+                "tool": "run_sql",
+                "objective": "Count the number of rows returned from the previous query. This represents the total number of orders placed by customer 18102."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 569,
+              "output_tokens": 138
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT COUNT(invoice_no) FROM sales WHERE customer_id = 18102",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1018,
+              "output_tokens": 31
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1074,
+              "output_tokens": 39
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1018,
+              "output_tokens": 33
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT COUNT(DISTINCT invoice_no) FROM sales WHERE customer_id = 18102 AND NOT is_cancellation",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1076,
+              "output_tokens": 39
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "Customer 18102 placed 145 orders across the whole dataset.",
+            "claims": [
+              {
+                "text": "Customer 18102 placed 145 orders across the whole dataset.",
+                "value": 145,
+                "unit": "orders",
+                "from_call": 1,
+                "calc": "none",
+                "inputs": []
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 880,
+              "output_tokens": 111
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 47.02,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 47.02,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 4,
+        "queries_ok": 0.5,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0,
+        "model_calls": 10,
+        "input_tokens": 9013,
+        "output_tokens": 687
+      }
+    },
+    {
+      "id": "q19",
+      "tier": 2,
+      "question": "How much revenue did stock code 22423 generate across the whole dataset?",
+      "expected": [
+        {
+          "revenue": 330590.32
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How much revenue did stock code 22423 generate across the whole dataset?",
+        "tier": 2,
+        "findings": "[call 0] Stock code 22423 generated \u00a3330,590.32 in revenue across the dataset. Revenue excludes cancellations.",
+        "claims": [
+          {
+            "text": "330590.32",
+            "value": 330590.32,
+            "unit": "revenue",
+            "from_call": 0,
+            "calc": "sum",
+            "inputs": [
+              22423,
+              1033030,
+              1
+            ]
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "is_product",
+          "is_outlier",
+          "is_cancellation",
+          "stock_code"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND stock_code = '22423' AND is_product AND NOT is_outlier"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": null,
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND stock_code = '22423' AND is_product AND NOT is_outlier",
+            "ok": true,
+            "rows": [
+              {
+                "revenue": 330590.32
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: Retrieve the total revenue for stock code 22423, excluding cancellations and outliers, across the entire dataset."
+        ],
+        "usage": {
+          "model_calls": 3,
+          "input_tokens": 2236,
+          "output_tokens": 278
+        },
+        "seconds": 9.9
+      },
+      "visible_claims": [
+        {
+          "text": "330590.32",
+          "value": 330590.32,
+          "unit": "revenue",
+          "from_call": 0,
+          "calc": "sum",
+          "inputs": [
+            22423,
+            1033030,
+            1
+          ]
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": true,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the total revenue for stock code 22423, excluding cancellations and outliers, across the entire dataset."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 540,
+              "output_tokens": 76
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND stock_code = '22423' AND is_product AND NOT is_outlier",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1015,
+              "output_tokens": 53
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 0] Stock code 22423 generated \u00a3330,590.32 in revenue across the dataset. Revenue excludes cancellations.",
+            "claims": [
+              {
+                "text": "330590.32",
+                "value": 330590.32,
+                "unit": "revenue",
+                "from_call": 0,
+                "calc": "sum",
+                "inputs": [
+                  22423,
+                  1033030,
+                  1
+                ]
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 681,
+              "output_tokens": 149
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 10.56,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 10.56,
+        "error": null,
+        "claims": 1,
+        "supported": 0,
+        "flagged": 0,
+        "unsupported": 1,
+        "undeclared": 0,
+        "evidence_coverage": 0.0,
+        "unsupported_rate": 1.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0,
+        "model_calls": 3,
+        "input_tokens": 2236,
+        "output_tokens": 278
+      }
+    },
+    {
+      "id": "q19",
+      "tier": 3,
+      "question": "How much revenue did stock code 22423 generate across the whole dataset?",
+      "expected": [
+        {
+          "revenue": 330590.32
+        }
+      ],
+      "status": "PASS",
+      "notes": [
+        "Displayed answer matches the database."
+      ],
+      "answer": {
+        "question": "How much revenue did stock code 22423 generate across the whole dataset?",
+        "tier": 3,
+        "findings": "Stock code 22423 generated \u00a3330590.32 in revenue. from run_sql, revenue: 330590.32",
+        "claims": [
+          {
+            "text": "Stock code 22423 generated \u00a3330590.32 in revenue.",
+            "value": 330590.32,
+            "unit": "\u00a3",
+            "from_call": 0,
+            "calc": "sum",
+            "inputs": [
+              330590.32
+            ],
+            "status": "supported",
+            "evidence": "Recalculated sum from calls [0]",
+            "problem": null
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "is_product",
+          "is_outlier",
+          "is_cancellation",
+          "stock_code"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND stock_code = '22423' AND is_product AND NOT is_outlier"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": "",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND stock_code = '22423' AND is_product AND NOT is_outlier;",
+            "ok": true,
+            "rows": [
+              {
+                "revenue": 330590.32
+              }
+            ],
+            "error": null
+          }
+        ],
+        "retries": 2,
+        "plan": [
+          "run_sql: Retrieve the total revenue for stock code 22423, excluding cancellations and outliers, considering the entire dataset from 2009 to 9 Dec 2011."
+        ],
+        "usage": {
+          "model_calls": 9,
+          "input_tokens": 6941,
+          "output_tokens": 887
+        },
+        "seconds": 18.0,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": []
+      },
+      "visible_claims": [
+        {
+          "text": "Stock code 22423 generated \u00a3330590.32 in revenue.",
+          "value": 330590.32,
+          "unit": "\u00a3",
+          "from_call": 0,
+          "calc": "sum",
+          "inputs": [
+            330590.32
+          ],
+          "status": "supported",
+          "evidence": "Recalculated sum from calls [0]",
+          "problem": null
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": true,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the total revenue for stock code 22423, excluding cancellations and outliers, across the entire dataset."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 540,
+              "output_tokens": 76
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND stock_code = '22423' AND is_product AND NOT is_outlier",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1015,
+              "output_tokens": 53
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 0] Stock code 22423 generated \u00a3330,590.32 in revenue across the dataset. Revenue excludes cancellations.",
+            "claims": [
+              {
+                "text": "330590.32",
+                "value": 330590.32,
+                "unit": "revenue",
+                "from_call": 0,
+                "calc": "sum",
+                "inputs": [
+                  22423,
+                  1033030,
+                  1
+                ]
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 681,
+              "output_tokens": 149
+            }
+          }
+        },
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the total revenue for stock code 22423, excluding cancellations and outliers, considering only valid sales records."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 587,
+              "output_tokens": 77
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND stock_code = '22423' AND is_product AND NOT is_outlier",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1016,
+              "output_tokens": 53
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 0] Stock code 22423 generated \u00a3330,590.32 in revenue. This revenue figure excludes cancellations and considers only products that were not identified as outliers.",
+            "claims": [
+              {
+                "text": "Stock code 22423 generated \u00a3330590.32 in revenue.",
+                "value": 330590.32,
+                "unit": "\u00a3",
+                "from_call": 0,
+                "calc": "sum",
+                "inputs": [
+                  1033030,
+                  1,
+                  330590.32
+                ]
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 730,
+              "output_tokens": 174
+            }
+          }
+        },
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": true,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the total revenue for stock code 22423, excluding cancellations and outliers, considering the entire dataset from 2009 to 9 Dec 2011."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 599,
+              "output_tokens": 91
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT ROUND(SUM(revenue), 2) AS revenue FROM sales WHERE NOT is_cancellation AND stock_code = '22423' AND is_product AND NOT is_outlier;",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1030,
+              "output_tokens": 53
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "[call 0] Stock code 22423 generated \u00a3330590.32 in revenue. from run_sql, revenue: 330590.32",
+            "claims": [
+              {
+                "text": "Stock code 22423 generated \u00a3330590.32 in revenue.",
+                "value": 330590.32,
+                "unit": "\u00a3",
+                "from_call": 0,
+                "calc": "sum",
+                "inputs": [
+                  330590.32
+                ]
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 743,
+              "output_tokens": 161
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 18.36,
+      "metrics": {
+        "answerable": true,
+        "correct": 1.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 18.36,
+        "error": null,
+        "claims": 1,
+        "supported": 1,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 1,
+        "queries_ok": 1.0,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 1.0,
+        "model_calls": 9,
+        "input_tokens": 6941,
+        "output_tokens": 887
+      }
+    },
+    {
+      "id": "q23",
+      "tier": 2,
+      "question": "Which five customers placed the most orders in 2011?",
+      "expected": [
+        {
+          "customer_id": 14911.0,
+          "orders": 188
+        },
+        {
+          "customer_id": 12748.0,
+          "orders": 175
+        },
+        {
+          "customer_id": 17841.0,
+          "orders": 118
+        },
+        {
+          "customer_id": 13089.0,
+          "orders": 89
+        },
+        {
+          "customer_id": 14606.0,
+          "orders": 85
+        }
+      ],
+      "status": "FAIL",
+      "notes": [
+        "The visible answer does not contain every expected measurement/fact with its correct label."
+      ],
+      "answer": {
+        "question": "Which five customers placed the most orders in 2011?",
+        "tier": 2,
+        "findings": "The five customers who placed the most orders in 2011 were customer_id 3174 with 3174 orders, customer_id 14911 with 185 orders, customer_id 12748 with 171 orders, customer_id 17841 with 118 orders, and customer_id 13089 with 89 orders.",
+        "claims": [
+          {
+            "text": "customer_id 3174 with 3174 orders",
+            "value": 3174,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [
+              3174
+            ]
+          },
+          {
+            "text": "customer_id 14911 with 185 orders",
+            "value": 185,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [
+              185
+            ]
+          },
+          {
+            "text": "customer_id 12748 with 171 orders",
+            "value": 171,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [
+              171
+            ]
+          },
+          {
+            "text": "customer_id 17841 with 118 orders",
+            "value": 118,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [
+              118
+            ]
+          },
+          {
+            "text": "customer_id 13089 with 89 orders",
+            "value": 89,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [
+              89
+            ]
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "customer_id",
+          "invoice_no",
+          "is_product",
+          "is_outlier",
+          "invoice_date",
+          "is_cancellation"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND is_product AND NOT is_outlier AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": null,
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "ok": true,
+            "rows": [
+              {
+                "customer_id": null,
+                "number_of_orders": 3174
+              },
+              {
+                "customer_id": 14911.0,
+                "number_of_orders": 185
+              },
+              {
+                "customer_id": 12748.0,
+                "number_of_orders": 171
+              },
+              {
+                "customer_id": 17841.0,
+                "number_of_orders": 118
+              },
+              {
+                "customer_id": 13089.0,
+                "number_of_orders": 89
+              }
+            ],
+            "error": null
+          },
+          {
+            "n": 1,
+            "tool": "run_python",
+            "code": "{'operation': 'ratio', 'values': [3174, 185, 171, 118, 89], 'result_name': 'number_of_orders', '_usage': {'model_calls': 1, 'input_tokens': 1024, 'output_tokens': 56}}",
+            "ok": false,
+            "rows": [],
+            "error": "ratio needs [top, bottom] and bottom cannot be zero"
+          }
+        ],
+        "retries": 0,
+        "plan": [
+          "run_sql: Retrieve the customer_id and the number of orders for each customer in 2011.",
+          "run_python: Sort the results from the SQL query by the number of orders in descending order."
+        ],
+        "usage": {
+          "model_calls": 4,
+          "input_tokens": 3481,
+          "output_tokens": 776
+        },
+        "seconds": 13.4
+      },
+      "visible_claims": [
+        {
+          "text": "customer_id 3174 with 3174 orders",
+          "value": 3174,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [
+            3174
+          ]
+        },
+        {
+          "text": "customer_id 14911 with 185 orders",
+          "value": 185,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [
+            185
+          ]
+        },
+        {
+          "text": "customer_id 12748 with 171 orders",
+          "value": 171,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [
+            171
+          ]
+        },
+        {
+          "text": "customer_id 17841 with 118 orders",
+          "value": 118,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [
+            118
+          ]
+        },
+        {
+          "text": "customer_id 13089 with 89 orders",
+          "value": 89,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [
+            89
+          ]
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the customer_id and the number of orders for each customer in 2011."
+              },
+              {
+                "step": 2,
+                "tool": "run_python",
+                "objective": "Sort the results from the SQL query by the number of orders in descending order."
+              }
+            ],
+            "reason": "I need to first extract the customer IDs and order counts from the sales table for 2011. Then, I need to sort this data to identify the top five customers.",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 536,
+              "output_tokens": 142
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1007,
+              "output_tokens": 77
+            }
+          }
+        },
+        {
+          "stage": "PYTHON",
+          "response": {
+            "operation": "ratio",
+            "values": [
+              3174,
+              185,
+              171,
+              118,
+              89
+            ],
+            "result_name": "number_of_orders",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1024,
+              "output_tokens": 56
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "The five customers who placed the most orders in 2011 were customer_id 3174 with 3174 orders, customer_id 14911 with 185 orders, customer_id 12748 with 171 orders, customer_id 17841 with 118 orders, and customer_id 13089 with 89 orders.",
+            "claims": [
+              {
+                "text": "customer_id 3174 with 3174 orders",
+                "value": 3174,
+                "unit": "orders",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": [
+                  3174
+                ]
+              },
+              {
+                "text": "customer_id 14911 with 185 orders",
+                "value": 185,
+                "unit": "orders",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": [
+                  185
+                ]
+              },
+              {
+                "text": "customer_id 12748 with 171 orders",
+                "value": 171,
+                "unit": "orders",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": [
+                  171
+                ]
+              },
+              {
+                "text": "customer_id 17841 with 118 orders",
+                "value": 118,
+                "unit": "orders",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": [
+                  118
+                ]
+              },
+              {
+                "text": "customer_id 13089 with 89 orders",
+                "value": 89,
+                "unit": "orders",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": [
+                  89
+                ]
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 914,
+              "output_tokens": 501
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 13.81,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 13.81,
+        "error": null,
+        "claims": 5,
+        "supported": 5,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 8,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 2,
+        "queries_ok": 0.5,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 0.0,
+        "model_calls": 4,
+        "input_tokens": 3481,
+        "output_tokens": 776
+      }
+    },
+    {
+      "id": "q23",
+      "tier": 3,
+      "question": "Which five customers placed the most orders in 2011?",
+      "expected": [
+        {
+          "customer_id": 14911.0,
+          "orders": 188
+        },
+        {
+          "customer_id": 12748.0,
+          "orders": 175
+        },
+        {
+          "customer_id": 17841.0,
+          "orders": 118
+        },
+        {
+          "customer_id": 13089.0,
+          "orders": 89
+        },
+        {
+          "customer_id": 14606.0,
+          "orders": 85
+        }
+      ],
+      "status": "FAIL",
+      "notes": [
+        "The visible answer does not contain every expected measurement/fact with its correct label."
+      ],
+      "answer": {
+        "question": "Which five customers placed the most orders in 2011?",
+        "tier": 3,
+        "findings": "The five customers who placed the most orders in 2011 were customer_id 3174 with 3174 orders, customer_id [unverified] with 185 orders, customer_id [unverified] with 171 orders, customer_id [unverified] with 118 orders, and customer_id [unverified] with 89 orders.",
+        "claims": [
+          {
+            "text": "customer_id 3174 with 3174 orders",
+            "value": 3174,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [
+              3174
+            ],
+            "status": "supported",
+            "evidence": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "problem": null,
+            "row": 0,
+            "column": "number_of_orders"
+          },
+          {
+            "text": "customer_id [unverified] with 185 orders",
+            "value": 185,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [
+              185
+            ],
+            "status": "supported",
+            "evidence": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "problem": null,
+            "row": 1,
+            "column": "number_of_orders"
+          },
+          {
+            "text": "customer_id [unverified] with 171 orders",
+            "value": 171,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [
+              171
+            ],
+            "status": "supported",
+            "evidence": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "problem": null,
+            "row": 2,
+            "column": "number_of_orders"
+          },
+          {
+            "text": "customer_id [unverified] with 118 orders",
+            "value": 118,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [
+              118
+            ],
+            "status": "supported",
+            "evidence": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "problem": null,
+            "row": 3,
+            "column": "number_of_orders"
+          },
+          {
+            "text": "customer_id [unverified] with 89 orders",
+            "value": 89,
+            "unit": "orders",
+            "from_call": 0,
+            "calc": "none",
+            "inputs": [
+              89
+            ],
+            "status": "supported",
+            "evidence": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "problem": null,
+            "row": 4,
+            "column": "number_of_orders"
+          }
+        ],
+        "kpis": {},
+        "fields_used": [
+          "customer_id",
+          "invoice_no",
+          "is_product",
+          "is_outlier",
+          "invoice_date",
+          "is_cancellation"
+        ],
+        "filters_used": [
+          "NOT is_cancellation AND is_product AND NOT is_outlier AND YEAR(invoice_date) = 2011"
+        ],
+        "chart": null,
+        "route": "model_tools",
+        "scope_check": "numeric evidence only",
+        "insufficient_data": false,
+        "limitations": " Some figures could not be verified and were withheld.",
+        "log": [
+          {
+            "n": 0,
+            "tool": "run_sql",
+            "code": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "ok": true,
+            "rows": [
+              {
+                "customer_id": null,
+                "number_of_orders": 3174
+              },
+              {
+                "customer_id": 14911.0,
+                "number_of_orders": 185
+              },
+              {
+                "customer_id": 12748.0,
+                "number_of_orders": 171
+              },
+              {
+                "customer_id": 17841.0,
+                "number_of_orders": 118
+              },
+              {
+                "customer_id": 13089.0,
+                "number_of_orders": 89
+              }
+            ],
+            "error": null
+          },
+          {
+            "n": 1,
+            "tool": "run_python",
+            "code": "{'operation': 'ratio', 'values': [3174, 185, 171, 118, 89], 'result_name': 'number_of_orders', '_usage': {'model_calls': 1, 'input_tokens': 1024, 'output_tokens': 56}}",
+            "ok": false,
+            "rows": [],
+            "error": "ratio needs [top, bottom] and bottom cannot be zero"
+          }
+        ],
+        "retries": 1,
+        "plan": [
+          "run_sql: Retrieve the customer_id and the number of orders for each customer in 2011.",
+          "run_python: Sort the results from the SQL query by the number of orders in descending order."
+        ],
+        "usage": {
+          "model_calls": 7,
+          "input_tokens": 6202,
+          "output_tokens": 1054
+        },
+        "seconds": 25.4,
+        "scope_errors": [],
+        "reconciliation": [],
+        "undeclared": [
+          14911.0,
+          12748.0,
+          17841.0,
+          13089.0,
+          14911.0,
+          12748.0,
+          17841.0,
+          13089.0
+        ]
+      },
+      "visible_claims": [
+        {
+          "text": "customer_id 3174 with 3174 orders",
+          "value": 3174,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [
+            3174
+          ],
+          "status": "supported",
+          "evidence": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+          "problem": null,
+          "row": 0,
+          "column": "number_of_orders"
+        },
+        {
+          "text": "customer_id [unverified] with 185 orders",
+          "value": 185,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [
+            185
+          ],
+          "status": "supported",
+          "evidence": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+          "problem": null,
+          "row": 1,
+          "column": "number_of_orders"
+        },
+        {
+          "text": "customer_id [unverified] with 171 orders",
+          "value": 171,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [
+            171
+          ],
+          "status": "supported",
+          "evidence": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+          "problem": null,
+          "row": 2,
+          "column": "number_of_orders"
+        },
+        {
+          "text": "customer_id [unverified] with 118 orders",
+          "value": 118,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [
+            118
+          ],
+          "status": "supported",
+          "evidence": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+          "problem": null,
+          "row": 3,
+          "column": "number_of_orders"
+        },
+        {
+          "text": "customer_id [unverified] with 89 orders",
+          "value": 89,
+          "unit": "orders",
+          "from_call": 0,
+          "calc": "none",
+          "inputs": [
+            89
+          ],
+          "status": "supported",
+          "evidence": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+          "problem": null,
+          "row": 4,
+          "column": "number_of_orders"
+        }
+      ],
+      "model_calls": [
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Retrieve the customer_id and the number of orders for each customer in 2011."
+              },
+              {
+                "step": 2,
+                "tool": "run_python",
+                "objective": "Sort the results from the SQL query by the number of orders in descending order."
+              }
+            ],
+            "reason": "I need to first extract the customer IDs and order counts from the sales table for 2011. Then, I need to sort this data to identify the customers with the highest order counts.",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 536,
+              "output_tokens": 145
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT customer_id, COUNT(DISTINCT invoice_no) AS number_of_orders FROM sales WHERE NOT is_cancellation AND is_product AND NOT is_outlier AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY number_of_orders DESC LIMIT 5",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1007,
+              "output_tokens": 77
+            }
+          }
+        },
+        {
+          "stage": "PYTHON",
+          "response": {
+            "operation": "ratio",
+            "values": [
+              3174,
+              185,
+              171,
+              118,
+              89
+            ],
+            "result_name": "number_of_orders",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1024,
+              "output_tokens": 56
+            }
+          }
+        },
+        {
+          "stage": "ANSWER",
+          "response": {
+            "findings": "The five customers who placed the most orders in 2011 were customer_id 3174 with 3174 orders, customer_id 14911 with 185 orders, customer_id 12748 with 171 orders, customer_id 17841 with 118 orders, and customer_id 13089 with 89 orders.",
+            "claims": [
+              {
+                "text": "customer_id 3174 with 3174 orders",
+                "value": 3174,
+                "unit": "orders",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": [
+                  3174
+                ]
+              },
+              {
+                "text": "customer_id 14911 with 185 orders",
+                "value": 185,
+                "unit": "orders",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": [
+                  185
+                ]
+              },
+              {
+                "text": "customer_id 12748 with 171 orders",
+                "value": 171,
+                "unit": "orders",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": [
+                  171
+                ]
+              },
+              {
+                "text": "customer_id 17841 with 118 orders",
+                "value": 118,
+                "unit": "orders",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": [
+                  118
+                ]
+              },
+              {
+                "text": "customer_id 13089 with 89 orders",
+                "value": 89,
+                "unit": "orders",
+                "from_call": 0,
+                "calc": "none",
+                "inputs": [
+                  89
+                ]
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 914,
+              "output_tokens": 501
+            }
+          }
+        },
+        {
+          "stage": "PLAN",
+          "response": {
+            "sufficient_data": false,
+            "steps": [
+              {
+                "step": 1,
+                "tool": "run_sql",
+                "objective": "Identify all orders placed in 2011 and count them per customer."
+              },
+              {
+                "step": 2,
+                "tool": "run_python",
+                "objective": "Sort the results from step 1 by the order count in descending order and return the top 5 customer IDs."
+              },
+              {
+                "step": 3,
+                "tool": "make_chart",
+                "objective": "Visualize the top 5 customers by order count."
+              }
+            ],
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 633,
+              "output_tokens": 161
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT customer_id, COUNT(*) AS order_count FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY order_count DESC LIMIT 5",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1003,
+              "output_tokens": 57
+            }
+          }
+        },
+        {
+          "stage": "SQL",
+          "response": {
+            "sql": "SELECT customer_id, COUNT(*) AS order_count FROM sales WHERE NOT is_cancellation AND year(invoice_date) = 2011 GROUP BY customer_id ORDER BY order_count DESC LIMIT 5",
+            "_usage": {
+              "model_calls": 1,
+              "input_tokens": 1085,
+              "output_tokens": 57
+            }
+          }
+        }
+      ],
+      "elapsed_seconds": 26.14,
+      "metrics": {
+        "answerable": true,
+        "correct": 0.0,
+        "refused": false,
+        "route": "model_tools",
+        "seconds": 26.14,
+        "error": null,
+        "claims": 5,
+        "supported": 5,
+        "flagged": 0,
+        "unsupported": 0,
+        "undeclared": 0,
+        "evidence_coverage": 1.0,
+        "unsupported_rate": 0.0,
+        "queries": 2,
+        "queries_ok": 0.5,
+        "tool_selection_correct": 1.0,
+        "chart_correct": 0.0,
+        "model_calls": 7,
+        "input_tokens": 6202,
+        "output_tokens": 1054
+      }
+    }
+  ]
+}

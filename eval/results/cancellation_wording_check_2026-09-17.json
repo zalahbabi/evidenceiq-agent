@@ -1,0 +1,26 @@
+{
+  "checked_at": "2026-09-17T07:29:51.700290+00:00",
+  "source_report": "validated_checks_2026-09-17.json",
+  "check": "Re-render every saved Tier 3 answer before and after the cancellation population wording fix. Compare findings, interpretation, suggested_next_steps and claims.",
+  "inference_rerun": false,
+  "compared_answers": 30,
+  "changed_answers": [],
+  "source_hashes_before": {
+    "notebooks/06_evaluation.ipynb": "7ea22aa6b9378ca6ca4a7a9d4f078afcd58454e7ca253bc3f4f8a015b43f8a2e",
+    "requirements.txt": "40f1b34a0791b878959b4397b72e1bb53cc217d29f35057df7e9561d66773f9d",
+    "tests/run_examples.py": "d3a24a5b59dbe2ecbf38b1e21c8ce519731fed2d1f3f6f8ef38e5874b7746036",
+    "eval/benchmark.yaml": "be737ff9ed9b1b60732387fd353cdd952945c78ba32bc41efa05c73ffec2e2a6"
+  },
+  "source_hashes_after": {
+    "notebooks/06_evaluation.ipynb": "e7e384c31dd23334c944f12ad8673347cdb58d766185cf071d3aeead0254060f",
+    "requirements.txt": "40f1b34a0791b878959b4397b72e1bb53cc217d29f35057df7e9561d66773f9d",
+    "tests/run_examples.py": "d3a24a5b59dbe2ecbf38b1e21c8ce519731fed2d1f3f6f8ef38e5874b7746036",
+    "eval/benchmark.yaml": "be737ff9ed9b1b60732387fd353cdd952945c78ba32bc41efa05c73ffec2e2a6"
+  },
+  "regression_tests": {
+    "passed": 285,
+    "failed": 0,
+    "skipped": 0
+  },
+  "limitation": "The live benchmark preceded this label-only edge case fix. This confirms its displayed answers are unchanged; it does not claim a second inference run."
+}

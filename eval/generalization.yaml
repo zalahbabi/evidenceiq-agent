@@ -1,0 +1,84 @@
+# Separate wording/date checks and a suggested dashboard follow-up.
+# These are a small development check, not an independently held-out test set.
+# No question or reference SQL in this file is loaded by inference.
+questions:
+  - id: g01
+    question: "Show the revenue share from France for 2010."
+    answerable: true
+    difficulty: medium
+    gt_sql: |
+      SELECT ROUND(100.0 * SUM(CASE WHEN country='France' THEN revenue ELSE 0 END) / SUM(revenue),2) AS share_pct
+      FROM sales WHERE NOT is_cancellation AND year(invoice_date)=2010;
+    expected_tool: run_sql
+    expected_chart: none
+    reviewed_by: null
+
+  - id: g02
+    question: "Which three customers brought in the most revenue during 2010?"
+    answerable: true
+    difficulty: medium
+    gt_sql: |
+      SELECT customer_id, ROUND(SUM(revenue),2) AS revenue
+      FROM sales WHERE NOT is_cancellation AND customer_id IS NOT NULL AND year(invoice_date)=2010
+      GROUP BY customer_id ORDER BY revenue DESC LIMIT 3;
+    expected_tool: run_sql
+    expected_chart: bar
+    reviewed_by: null
+
+  - id: g03
+    question: "Compare revenue in June 2010 against May 2010. Give the percentage change."
+    answerable: true
+    difficulty: hard
+    gt_sql: |
+      SELECT ROUND(100.0 * (MAX(CASE WHEN invoice_month='2010-06' THEN net_revenue END)
+        - MAX(CASE WHEN invoice_month='2010-05' THEN net_revenue END))
+        / MAX(CASE WHEN invoice_month='2010-05' THEN net_revenue END),2) AS pct_change
+      FROM dim_month;
+    expected_tool: run_sql
+    expected_chart: line
+    reviewed_by: null
+
+  - id: g04
+    question: "Which months tied for the highest count of trading days?"
+    answerable: true
+    difficulty: medium
+    gt_sql: |
+      SELECT invoice_month,trading_days FROM dim_month
+      WHERE trading_days=(SELECT MAX(trading_days) FROM dim_month) ORDER BY invoice_month;
+    expected_tool: run_sql
+    expected_chart: none
+    reviewed_by: null
+
+  - id: g05
+    question: "How many completed orders did customer 14911 place in 2010?"
+    answerable: true
+    difficulty: easy
+    gt_sql: |
+      SELECT COUNT(DISTINCT invoice_no) AS orders FROM sales
+      WHERE NOT is_cancellation AND customer_id=14911 AND year(invoice_date)=2010;
+    expected_tool: run_sql
+    expected_chart: none
+    reviewed_by: null
+
+  - id: g06
+    question: "What were the three leading countries by revenue in 2010?"
+    answerable: true
+    difficulty: medium
+    gt_sql: |
+      SELECT country, ROUND(SUM(revenue),2) AS revenue FROM sales
+      WHERE NOT is_cancellation AND year(invoice_date)=2010
+      GROUP BY country ORDER BY revenue DESC LIMIT 3;
+    expected_tool: run_sql
+    expected_chart: bar
+    reviewed_by: null
+
+  - id: g07
+    question: "What was revenue per trading day in October 2011 and November 2011?"
+    answerable: true
+    difficulty: medium
+    gt_sql: |
+      SELECT invoice_month, ROUND(net_revenue / trading_days,2) AS revenue_per_day
+      FROM dim_month WHERE invoice_month IN ('2011-10','2011-11') ORDER BY invoice_month;
+    expected_tool: run_sql
+    expected_chart: none
+    reviewed_by: null
