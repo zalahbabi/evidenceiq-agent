@@ -125,13 +125,21 @@ def build_tables(df):
 
     # dim_month carries the December warning, so the AI does not have to
     # remember it. trading_days lets us compare months fairly.
+    #
+    # net_revenue EXCLUDES cancellations, to match KPI 1 in
+    # docs/kpi_definitions.md. It used to be a plain SUM(revenue), which
+    # quietly disagreed with the KPI doc: the agent would query
+    # "WHERE NOT is_cancellation" and get a different number to our own
+    # ground truth. gross_revenue keeps the with-cancellations figure so
+    # nothing is lost.
     con.execute("""
         CREATE TABLE dim_month AS
         SELECT
             invoice_month,
             COUNT(DISTINCT invoice_date) AS trading_days,
             MAX(invoice_date)            AS last_day,
-            SUM(revenue)                 AS net_revenue,
+            SUM(revenue) FILTER (WHERE NOT is_cancellation) AS net_revenue,
+            SUM(revenue)                 AS gross_revenue,
             invoice_month <> (SELECT MAX(invoice_month) FROM sales)
                                          AS is_complete_month
         FROM sales
@@ -180,9 +188,18 @@ def smoke_test():
     con = duckdb.connect(DB, read_only=True)
 
     november = con.execute("""
-        SELECT ROUND(SUM(revenue), 2) FROM sales WHERE invoice_month = '2011-11'
+        SELECT ROUND(net_revenue, 2) FROM dim_month WHERE invoice_month = '2011-11'
     """).fetchone()[0]
-    print("November 2011: GBP {:,.2f}  (expected 1,456,145.80)".format(november))
+    print("November 2011 net revenue: GBP {:,.2f}  (expected 1,503,866.78)"
+          .format(november))
+
+    # the agent's own query must agree with dim_month, or our ground truth
+    # and its answers will disagree on every month question
+    same = con.execute("""
+        SELECT ROUND(SUM(revenue), 2) FROM sales
+        WHERE NOT is_cancellation AND invoice_month = '2011-11'
+    """).fetchone()[0]
+    print("agrees with WHERE NOT is_cancellation:", same == november)
 
     december_days = con.execute("""
         SELECT trading_days FROM dim_month WHERE invoice_month = '2011-12'

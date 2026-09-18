@@ -1,0 +1,35 @@
+﻿id,category,question,latency_s,expected_insufficient_data,actual_insufficient_data,required_tools,forbidden_tools,actual_tools,successful_tools,execution_pass,tool_selection_pass,sql_rules_pass,claim_sources_pass,repair_used,num_claims,num_tool_calls,overall_pass,error
+B01,monthly_comparison,"Did November 2011 beat October 2011 on revenue, and by how much?",18.186,False,False,run_sql|run_python|make_chart,,make_chart|run_python|run_sql,make_chart|run_python|run_sql,True,True,False,True,False,5,3,False,
+B02,monthly_comparison,"How did October 2011 revenue compare with September 2011, and by how much?",21.145,False,False,run_sql|run_python|make_chart,,make_chart|run_python|run_sql,make_chart|run_python|run_sql,True,True,True,True,False,5,3,True,
+B03,monthly_fact,What was net revenue in November 2011?,11.433,False,False,run_sql,run_python,make_chart|run_sql,make_chart|run_sql,True,True,True,True,False,2,2,True,
+B04,monthly_fact,How many trading days were there in November 2011?,10.036,False,,run_sql,run_python,,,False,False,False,False,False,0,0,False,UnboundLocalError: cannot access local variable 'final_findings' where it is not associated with a value
+B05,incomplete_month,Did December 2011 revenue fall compared with November 2011?,15.806,False,False,run_sql|make_chart,run_python,make_chart|run_sql,make_chart|run_sql,True,True,True,True,False,4,2,True,
+B06,incomplete_month,Is December 2011 a complete month in the dataset?,10.804,False,,run_sql,run_python,,,False,False,False,False,False,0,0,False,UnboundLocalError: cannot access local variable 'final_findings' where it is not associated with a value
+B07,unsupported,What was our profit margin in 2011?,3.412,True,True,,run_sql|run_python|make_chart,,,True,True,True,True,False,0,0,True,
+B08,unsupported,What was our cost of goods sold in 2011?,2.111,True,True,,run_sql|run_python|make_chart,,,True,True,True,True,False,0,0,True,
+B09,unsupported,Which promotion generated the most revenue?,2.185,True,True,,run_sql|run_python|make_chart,,,True,True,True,True,False,0,0,True,
+B10,unsupported,How did competitor pricing affect our sales?,2.582,True,True,,run_sql|run_python|make_chart,,,True,True,True,True,False,0,0,True,
+B11,unsupported,Forecast our revenue for January 2012.,2.937,True,True,,run_sql|run_python|make_chart,,,True,True,True,True,False,0,0,True,
+B12,product_ranking,What were the top 10 products by revenue?,24.088,False,False,run_sql|make_chart,run_python,make_chart|run_sql,make_chart|run_sql,True,True,True,True,False,10,2,True,
+B13,product_ranking,What were the top 5 products by units sold?,13.21,False,False,run_sql|make_chart,run_python,make_chart|run_sql,make_chart|run_sql,True,True,True,True,False,5,2,True,
+B14,product_ranking,Which five products generated the most revenue outside the United Kingdom?,20.154,False,False,run_sql|make_chart,run_python,make_chart|run_sql,make_chart|run_sql,True,True,True,True,False,5,2,True,
+B15,customer_ranking,Who were the top five customers by revenue?,13.409,False,False,run_sql|make_chart,run_python,make_chart|run_sql,make_chart|run_sql,True,True,True,True,False,5,2,True,
+B16,customer_ranking,Which five customers placed the most orders?,14.335,False,False,run_sql|make_chart,run_python,make_chart|run_sql,make_chart|run_sql,True,True,True,True,False,5,2,True,
+B17,customer_ranking,Who were the top ten customers by revenue outside the United Kingdom?,12.166,False,False,run_sql|make_chart,run_python,make_chart|run_sql,make_chart|run_sql,True,True,True,True,False,10,2,True,
+B18,country_ranking,Which countries generated the most revenue outside the UK?,16.149,False,False,run_sql|make_chart,run_python,make_chart|run_sql,make_chart|run_sql,True,True,True,True,False,10,2,True,
+B19,country_ranking,What were the top five countries by revenue?,12.528,False,False,run_sql|make_chart,run_python,make_chart|run_sql,make_chart|run_sql,True,True,True,True,False,5,2,True,
+B20,country_fact,How much revenue came from France?,9.058,False,,run_sql,run_python,,,False,False,False,False,False,0,0,False,UnboundLocalError: cannot access local variable 'final_findings' where it is not associated with a value
+B21,country_comparison,"Did Germany generate more revenue than France, and by how much?",14.999,False,,run_sql|run_python|make_chart,,,,False,False,False,False,False,0,0,False,"ValidationError: 1 validation error for SQLRequest
+  Invalid JSON: EOF while parsing a string at line 3 column 1533 [type=json_invalid, input_value='{\n  ""reasoning_summary""... is installed.  No data', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"
+B22,country_share,What share of total revenue came from the United Kingdom?,14.544,False,False,run_sql,,make_chart|run_python|run_sql,make_chart|run_python|run_sql,True,True,True,True,False,1,3,True,
+B23,customer_country,Which countries had the most customers?,11.216,False,,run_sql|make_chart,run_python,,,False,False,False,False,False,0,0,False,UnboundLocalError: cannot access local variable 'final_findings' where it is not associated with a value
+B24,customer_country,Which countries had the highest average customer revenue?,13.516,False,,run_sql|make_chart,run_python,,,False,False,False,False,False,0,0,False,UnboundLocalError: cannot access local variable 'final_findings' where it is not associated with a value
+B25,monthly_trend,Show the monthly revenue trend from January through November 2011.,12.428,False,False,run_sql|make_chart,run_python,make_chart|run_sql,make_chart|run_sql,True,True,True,True,False,11,2,True,
+B26,monthly_ranking,Which complete month had the highest revenue?,10.173,False,False,run_sql,run_python,make_chart|run_sql,make_chart|run_sql,True,True,True,True,False,1,2,True,
+B27,monthly_ranking,Which complete month had the lowest revenue?,15.317,False,False,run_sql,run_python,make_chart|run_python|run_sql,make_chart|run_python|run_sql,True,False,True,True,False,2,3,False,
+B28,monthly_fact,Which month had the most trading days?,8.858,False,,run_sql,run_python,,,False,False,False,False,False,0,0,False,UnboundLocalError: cannot access local variable 'final_findings' where it is not associated with a value
+B29,customer_fact,How many orders did customer 18102 place?,9.074,False,,run_sql,run_python,,,False,False,False,False,False,0,0,False,UnboundLocalError: cannot access local variable 'final_findings' where it is not associated with a value
+B30,product_fact,What revenue did stock code 22423 generate?,13.204,False,,run_sql,run_python,,,False,False,False,False,False,0,0,False,"ValidationError: 1 validation error for SQLRequest
+  Invalid JSON: EOF while parsing a string at line 3 column 1162 [type=json_invalid, input_value='{\n  ""reasoning_summary""...on tool_call:sql_query_', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.13/v/json_invalid"

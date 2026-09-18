@@ -1,0 +1,541 @@
+[
+  {
+    "id": "B01",
+    "category": "monthly_comparison",
+    "question": "Did November 2011 beat October 2011 on revenue, and by how much?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "run_python",
+      "make_chart"
+    ],
+    "forbidden_tools": [],
+    "required_sql_terms": [
+      "dim_month",
+      "net_revenue",
+      "trading_days",
+      "is_complete_month"
+    ],
+    "min_claims": 3
+  },
+  {
+    "id": "B02",
+    "category": "monthly_comparison",
+    "question": "How did October 2011 revenue compare with September 2011, and by how much?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "run_python",
+      "make_chart"
+    ],
+    "forbidden_tools": [],
+    "required_sql_terms": [
+      "dim_month",
+      "net_revenue",
+      "trading_days",
+      "is_complete_month"
+    ],
+    "min_claims": 3
+  },
+  {
+    "id": "B03",
+    "category": "monthly_fact",
+    "question": "What was net revenue in November 2011?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_month",
+      "net_revenue"
+    ],
+    "min_claims": 1
+  },
+  {
+    "id": "B04",
+    "category": "monthly_fact",
+    "question": "How many trading days were there in November 2011?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_month",
+      "trading_days"
+    ],
+    "min_claims": 0
+  },
+  {
+    "id": "B05",
+    "category": "incomplete_month",
+    "question": "Did December 2011 revenue fall compared with November 2011?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "make_chart"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_month",
+      "net_revenue",
+      "trading_days",
+      "is_complete_month"
+    ],
+    "min_claims": 2
+  },
+  {
+    "id": "B06",
+    "category": "incomplete_month",
+    "question": "Is December 2011 a complete month in the dataset?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_month",
+      "is_complete_month"
+    ],
+    "min_claims": 0
+  },
+  {
+    "id": "B07",
+    "category": "unsupported",
+    "question": "What was our profit margin in 2011?",
+    "expect_insufficient_data": true,
+    "required_tools": [],
+    "forbidden_tools": [
+      "run_sql",
+      "run_python",
+      "make_chart"
+    ],
+    "required_sql_terms": [],
+    "min_claims": 0
+  },
+  {
+    "id": "B08",
+    "category": "unsupported",
+    "question": "What was our cost of goods sold in 2011?",
+    "expect_insufficient_data": true,
+    "required_tools": [],
+    "forbidden_tools": [
+      "run_sql",
+      "run_python",
+      "make_chart"
+    ],
+    "required_sql_terms": [],
+    "min_claims": 0
+  },
+  {
+    "id": "B09",
+    "category": "unsupported",
+    "question": "Which promotion generated the most revenue?",
+    "expect_insufficient_data": true,
+    "required_tools": [],
+    "forbidden_tools": [
+      "run_sql",
+      "run_python",
+      "make_chart"
+    ],
+    "required_sql_terms": [],
+    "min_claims": 0
+  },
+  {
+    "id": "B10",
+    "category": "unsupported",
+    "question": "How did competitor pricing affect our sales?",
+    "expect_insufficient_data": true,
+    "required_tools": [],
+    "forbidden_tools": [
+      "run_sql",
+      "run_python",
+      "make_chart"
+    ],
+    "required_sql_terms": [],
+    "min_claims": 0
+  },
+  {
+    "id": "B11",
+    "category": "unsupported",
+    "question": "Forecast our revenue for January 2012.",
+    "expect_insufficient_data": true,
+    "required_tools": [],
+    "forbidden_tools": [
+      "run_sql",
+      "run_python",
+      "make_chart"
+    ],
+    "required_sql_terms": [],
+    "min_claims": 0
+  },
+  {
+    "id": "B12",
+    "category": "product_ranking",
+    "question": "What were the top 10 products by revenue?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "make_chart"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "is_product",
+      "is_outlier",
+      "is_cancellation",
+      "revenue"
+    ],
+    "min_claims": 10
+  },
+  {
+    "id": "B13",
+    "category": "product_ranking",
+    "question": "What were the top 5 products by units sold?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "make_chart"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "is_product",
+      "is_outlier",
+      "is_cancellation",
+      "quantity"
+    ],
+    "min_claims": 5
+  },
+  {
+    "id": "B14",
+    "category": "product_ranking",
+    "question": "Which five products generated the most revenue outside the United Kingdom?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "make_chart"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "is_product",
+      "is_outlier",
+      "is_cancellation",
+      "country",
+      "united kingdom"
+    ],
+    "min_claims": 5
+  },
+  {
+    "id": "B15",
+    "category": "customer_ranking",
+    "question": "Who were the top five customers by revenue?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "make_chart"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_customer",
+      "customer_id",
+      "net_revenue"
+    ],
+    "min_claims": 5
+  },
+  {
+    "id": "B16",
+    "category": "customer_ranking",
+    "question": "Which five customers placed the most orders?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "make_chart"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_customer",
+      "customer_id",
+      "orders"
+    ],
+    "min_claims": 5
+  },
+  {
+    "id": "B17",
+    "category": "customer_ranking",
+    "question": "Who were the top ten customers by revenue outside the United Kingdom?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "make_chart"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_customer",
+      "customer_id",
+      "net_revenue",
+      "country",
+      "united kingdom"
+    ],
+    "min_claims": 10
+  },
+  {
+    "id": "B18",
+    "category": "country_ranking",
+    "question": "Which countries generated the most revenue outside the UK?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "make_chart"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "country",
+      "revenue",
+      "is_cancellation",
+      "united kingdom"
+    ],
+    "min_claims": 5
+  },
+  {
+    "id": "B19",
+    "category": "country_ranking",
+    "question": "What were the top five countries by revenue?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "make_chart"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "country",
+      "revenue",
+      "is_cancellation"
+    ],
+    "min_claims": 5
+  },
+  {
+    "id": "B20",
+    "category": "country_fact",
+    "question": "How much revenue came from France?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "country",
+      "france",
+      "revenue",
+      "is_cancellation"
+    ],
+    "min_claims": 0
+  },
+  {
+    "id": "B21",
+    "category": "country_comparison",
+    "question": "Did Germany generate more revenue than France, and by how much?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "run_python",
+      "make_chart"
+    ],
+    "forbidden_tools": [],
+    "required_sql_terms": [
+      "country",
+      "germany",
+      "france",
+      "revenue",
+      "is_cancellation"
+    ],
+    "min_claims": 1
+  },
+  {
+    "id": "B22",
+    "category": "country_share",
+    "question": "What share of total revenue came from the United Kingdom?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql"
+    ],
+    "forbidden_tools": [],
+    "required_sql_terms": [
+      "revenue",
+      "is_cancellation",
+      "united kingdom"
+    ],
+    "min_claims": 0
+  },
+  {
+    "id": "B23",
+    "category": "customer_country",
+    "question": "Which countries had the most customers?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "make_chart"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_customer",
+      "country",
+      "customer_id"
+    ],
+    "min_claims": 0
+  },
+  {
+    "id": "B24",
+    "category": "customer_country",
+    "question": "Which countries had the highest average customer revenue?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "make_chart"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_customer",
+      "country",
+      "net_revenue"
+    ],
+    "min_claims": 0
+  },
+  {
+    "id": "B25",
+    "category": "monthly_trend",
+    "question": "Show the monthly revenue trend from January through November 2011.",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql",
+      "make_chart"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_month",
+      "invoice_month",
+      "net_revenue"
+    ],
+    "min_claims": 0
+  },
+  {
+    "id": "B26",
+    "category": "monthly_ranking",
+    "question": "Which complete month had the highest revenue?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_month",
+      "net_revenue",
+      "is_complete_month"
+    ],
+    "min_claims": 1
+  },
+  {
+    "id": "B27",
+    "category": "monthly_ranking",
+    "question": "Which complete month had the lowest revenue?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_month",
+      "net_revenue",
+      "is_complete_month"
+    ],
+    "min_claims": 1
+  },
+  {
+    "id": "B28",
+    "category": "monthly_fact",
+    "question": "Which month had the most trading days?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_month",
+      "trading_days"
+    ],
+    "min_claims": 0
+  },
+  {
+    "id": "B29",
+    "category": "customer_fact",
+    "question": "How many orders did customer 18102 place?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "dim_customer",
+      "customer_id",
+      "orders"
+    ],
+    "min_claims": 0
+  },
+  {
+    "id": "B30",
+    "category": "product_fact",
+    "question": "What revenue did stock code 22423 generate?",
+    "expect_insufficient_data": false,
+    "required_tools": [
+      "run_sql"
+    ],
+    "forbidden_tools": [
+      "run_python"
+    ],
+    "required_sql_terms": [
+      "stock_code",
+      "revenue",
+      "is_cancellation"
+    ],
+    "min_claims": 0
+  }
+]

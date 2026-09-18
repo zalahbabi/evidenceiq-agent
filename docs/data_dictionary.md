@@ -172,8 +172,16 @@ grouping `sales` yourself — it already carries the traps.
 | `invoice_month` | `YYYY-MM` |
 | `trading_days` | distinct days with at least one order |
 | `last_day` | last date seen in that month |
-| `net_revenue` | total revenue including cancellations |
+| `net_revenue` | revenue **excluding** cancellations — matches KPI 1 |
+| `gross_revenue` | revenue **including** cancellations |
 | `is_complete_month` | FALSE for the final month in the data |
+
+> **Changed 2026-09-04.** `net_revenue` used to be a plain `SUM(revenue)`, which
+> included cancellations and therefore contradicted KPI 1. The agent would query
+> `WHERE NOT is_cancellation` and get a different answer to our own ground truth,
+> and the verifier could not tell which was right — both numbers came from real
+> queries. `net_revenue` now excludes cancellations and `gross_revenue` keeps the
+> old figure. Benchmark questions q09, q11, q12 and q14 were recomputed.
 
 ### Why this table exists
 
@@ -181,9 +189,9 @@ grouping `sales` yourself — it already carries the traps.
 never a valid month-over-month comparison. `is_complete_month` is FALSE for it.
 
 **Months have different trading-day counts.** March 2011 had 27 and April had
-21. Revenue "fell 28%" between them, but per trading day it fell about 7%.
-Both numbers are true and they support opposite decisions, so any month
-comparison must state the day count.
+21. Revenue fell 25.03% between them (716,215 to 536,969), but per trading day
+it fell only 3.61% (26,526 to 25,570). Both numbers are true and they support
+opposite decisions, so any month comparison must state the day count.
 
 **December trails off anyway.** The shop stops trading around the 23rd, so a
 November-to-December drop is normal, not a problem.
@@ -243,9 +251,10 @@ first two automatically and refuses to write the file if they fail.
 | Rows in `sales` | 1,033,030 |
 | Total revenue (cancellations included) | 19,003,147.78 |
 | Revenue excluding cancellations | 20,465,198.39 |
-| November 2011 revenue | 1,456,145.80 |
+| November 2011 net revenue (`dim_month`) | 1,503,866.78 |
+| November 2011 gross revenue (with cancellations) | 1,456,145.80 |
 | December 2011 trading days | 8 |
-| December 2010 revenue (the overlap test) | 746,723.61 |
+| December 2010 gross revenue (the overlap test) | 746,723.61 |
 
 The last one is the important one. If December 2010 comes out near 1,126,445,
 the deduplication step did not run.

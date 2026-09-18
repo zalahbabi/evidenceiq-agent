@@ -99,19 +99,17 @@ data/         raw/ and processed/ - both gitignored, both rebuildable
 docs/         data dictionary, KPI definitions, the tier explainer
 eval/         benchmark.yaml and results/
 notebooks/    01 to 06, in order
-src/          build_db.py and evidenceiq.py
+src/          build_db.py
 ```
 
-`src/evidenceiq.py` holds everything the notebooks share — the tools, the
-prompts, the three tiers and the verifier. One file, six labelled sections.
+**Each notebook is self-contained.** It defines every function it needs, so you
+can open any one of them and run it top to bottom without setting anything up
+first. Notebooks 05 and 06 start with a setup cell that repeats the code from
+the notebooks before them.
 
-```python
-import sys; sys.path.append("../src")
-import evidenceiq as eiq
-
-answer = eiq.tier3("What was our total revenue in 2011?")
-eiq.show(answer)
-```
+The trade-off: if you fix a bug in `run_sql` or `verify`, **fix it in every
+notebook that defines it**. Notebook 04 defines the tools, 05 adds the checker,
+06 has everything.
 
 ---
 
@@ -141,7 +139,7 @@ Full detail in `01_eda.ipynb`. The short version:
 2. **December 2011 is incomplete** — the data stops on the 9th, 8 trading days.
    Never a valid month-over-month comparison. Check `dim_month.is_complete_month`.
 3. **Months have different numbers of trading days.** March 2011 had 27, April 21.
-   Revenue "fell 28%", but per trading day it fell 7%. Say the day count.
+   Revenue fell 25%, but per trading day it fell only 3.6%. Say the day count.
 4. **The UK is 85% of revenue.** "Which country earns most" is a constant, not a question.
 5. **Most "returns" are not returns** — Amazon fees, manual adjustments, and two
    freak orders cancelled minutes after being placed. Naive rate 8%+, real

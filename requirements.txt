@@ -5,6 +5,7 @@
 pandas>=2.2
 openpyxl>=3.1          # pandas needs this to read .xlsx files
 duckdb>=1.0            # analytics database, read-only at query time
+sqlglot>=25.0          # parses the agent's SQL so we can check it is read-only
 
 # --- Charts ---
 matplotlib>=3.8

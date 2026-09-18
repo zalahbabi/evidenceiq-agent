@@ -1,0 +1,13 @@
+{
+  "questions": 30,
+  "execution_success_rate_pct": 70.0,
+  "tool_selection_accuracy_pct": 66.67,
+  "sql_business_rule_pass_rate_pct": 66.67,
+  "claim_source_validity_pct": 70.0,
+  "overall_pass_rate_pct": 63.33,
+  "mean_latency_s": 11.969,
+  "median_latency_s": 12.478,
+  "min_latency_s": 2.111,
+  "max_latency_s": 24.088,
+  "sql_repairs_used": 0
+}
